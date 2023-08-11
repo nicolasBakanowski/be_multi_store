@@ -1,5 +1,5 @@
 import { Model, DataTypes } from "sequelize";
-import sequelize from "../db"; // Asegúrate de importar tu instancia de Sequelize correctamente
+import sequelize from "../db";
 
 class Category extends Model {
   public id!: number;
