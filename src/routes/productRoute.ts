@@ -4,10 +4,14 @@ import {
   getAllProductsController,
   getProductByIdController,
 } from "../controllers/productController";
-
+import { upload } from "../helpers/imageUtils";
 const productRoute = express.Router();
 
-productRoute.post("/new", createProductController);
+productRoute.post(
+  "/new",
+  upload.single("productImage"),
+  createProductController
+);
 productRoute.get("/all", getAllProductsController);
 productRoute.get("/:id", getProductByIdController);
 

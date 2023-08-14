@@ -6,10 +6,12 @@ import morgan from "morgan";
 import helmetCsp from "helmet-csp";
 import rateLimit from "express-rate-limit";
 import categoryRoute from "./routes/categoryRoute";
-
+import productRoute from "./routes/productRoute";
+import bodyParser from "body-parser";
 const app = express();
 const PORT = process.env.PORT || 30001;
-
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(helmet());
 app.use(cors());
 app.use(express.json());
@@ -29,6 +31,7 @@ app.use(morgan("combined")); // Puedes ajustar el formato de registro según tus
 
 // Usar el enrutador
 app.use("/category", categoryRoute);
+app.use("/product", productRoute);
 
 app.listen(PORT, () => {
   console.log(`Servidor escuchando en el puerto ${PORT}`);

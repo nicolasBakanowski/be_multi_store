@@ -18,6 +18,9 @@ async function createProductController(req: Request, res: Response) {
       imageUrl,
       categoryId,
     };
+    if (req.file) {
+      productData.imageUrl = req.file.filename;
+    }
     const newProduct = await createProductService(productData);
     res.status(201).json(newProduct);
   } catch (error) {
@@ -28,6 +31,7 @@ async function createProductController(req: Request, res: Response) {
 
 async function getAllProductsController(req: Request, res: Response) {
   try {
+    console.log("entro por aca");
     const products = await getAllProductsService();
     res.status(200).json(products);
   } catch (error) {
