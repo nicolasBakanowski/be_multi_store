@@ -5,9 +5,11 @@ import compression from "compression";
 import morgan from "morgan";
 import helmetCsp from "helmet-csp";
 import rateLimit from "express-rate-limit";
+import bodyParser from "body-parser";
 import categoryRoute from "./routes/categoryRoute";
 import productRoute from "./routes/productRoute";
-import bodyParser from "body-parser";
+import userRoute from "./routes/usersRoute";
+
 const app = express();
 const PORT = process.env.PORT || 30001;
 app.use(bodyParser.json());
@@ -28,10 +30,10 @@ app.use(limiter);
 
 // Usar morgan para registrar solicitudes
 app.use(morgan("combined")); // Puedes ajustar el formato de registro según tus necesidades
-
 // Usar el enrutador
 app.use("/category", categoryRoute);
 app.use("/product", productRoute);
+app.use("/users", userRoute);
 
 app.listen(PORT, () => {
   console.log(`Servidor escuchando en el puerto ${PORT}`);
