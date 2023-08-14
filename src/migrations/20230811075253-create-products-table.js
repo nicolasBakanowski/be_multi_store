@@ -31,7 +31,7 @@ module.exports = {
       categoryId: {
         type: Sequelize.INTEGER,
         references: {
-          model: "categories", // Asegúrate de que coincida con el nombre de tu tabla de categorías
+          model: "Categories", // Asegúrate de que coincida con el nombre de tu tabla de categorías
           key: "id",
         },
         onUpdate: "CASCADE",
