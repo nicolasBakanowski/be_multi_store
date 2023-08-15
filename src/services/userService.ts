@@ -5,7 +5,7 @@ import {
   createUserInDB,
   findUserByEmail,
 } from "../repositories/userRepository";
-
+import { TokenPayload } from "../interfaces/tokenPayload";
 async function loginUserService(
   email: string,
   password: string
@@ -20,7 +20,13 @@ async function loginUserService(
       throw new Error("Invalid password");
     }
 
-    const tokenPayload = { userId: user.id };
+    const tokenPayload: TokenPayload = {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      roleId: user.roleId,
+      // Otros campos del usuario que quieras incluir en el token
+    };
     const token = generateToken(tokenPayload);
 
     return token;

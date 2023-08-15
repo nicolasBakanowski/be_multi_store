@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from "express";
 import { verifyToken } from "../helpers/tokenManager";
-
 export const authMiddleware = (
   req: Request,
   res: Response,
@@ -17,7 +16,7 @@ export const authMiddleware = (
     return res.status(401).json({ error: "Invalid token" });
   }
 
-  // Pasamos los datos del usuario al siguiente middleware
+  // Pasamos los datos del usuario al objeto req.user
   req.body.user = decoded;
   next();
 };

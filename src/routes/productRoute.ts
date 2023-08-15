@@ -5,12 +5,13 @@ import {
   getProductByIdController,
 } from "../controllers/productController";
 import { upload } from "../helpers/imageUtils";
-import isAdminMiddleware from "../middleware/isAdminMiddleware";
-
+import { isAdminMiddleware } from "../middleware/isAdminMiddleware";
+import { authMiddleware } from "../middleware/authMiddleware";
 const productRoute = express.Router();
 
 productRoute.post(
   "/new",
+  authMiddleware,
   isAdminMiddleware,
   upload.single("productImage"),
   createProductController

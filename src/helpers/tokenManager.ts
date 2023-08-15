@@ -1,10 +1,7 @@
 import jwt from "jsonwebtoken";
-
+import { removeBearerPrefix } from "./removeBeaber";
+import { TokenPayload } from "../interfaces/tokenPayload";
 const secretKey = "your-secret-key"; // Cambia esto a tu clave secreta
-
-interface TokenPayload {
-  userId: number;
-}
 
 export const generateToken = (payload: TokenPayload): string => {
   const token = jwt.sign(payload, secretKey, { expiresIn: "1h" });
@@ -13,7 +10,10 @@ export const generateToken = (payload: TokenPayload): string => {
 
 export const verifyToken = (token: string): TokenPayload | null => {
   try {
-    const decoded = jwt.verify(token, secretKey) as TokenPayload;
+    const decoded = jwt.verify(
+      removeBearerPrefix(token),
+      secretKey
+    ) as TokenPayload;
     return decoded;
   } catch (error) {
     return null;
