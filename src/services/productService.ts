@@ -9,7 +9,6 @@ async function createProductService(productData: ProductAttributes) {
     const newProduct = await createProductInDB(productData);
     return newProduct;
   } catch (error) {
-    console.log("este es el error", error);
     throw new Error("Error creating product");
   }
 }

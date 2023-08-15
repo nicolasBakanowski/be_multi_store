@@ -2,11 +2,11 @@ import { Optional } from "sequelize";
 
 interface UserAttributes {
   id: number;
-  nombre: string;
+  name: string;
   email: string;
   password: string;
   googleId?: string | null;
-  telefono?: string | null;
+  phone?: string | null;
   roleId?: number | null;
   createdAt?: Date;
   updatedAt?: Date;

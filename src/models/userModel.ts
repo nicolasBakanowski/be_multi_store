@@ -1,4 +1,4 @@
-import { DataTypes, Model, Optional } from "sequelize";
+import { DataTypes, Model } from "sequelize";
 import sequelize from "../db";
 import {
   UserAttributes,
@@ -10,11 +10,11 @@ class User
   implements UserAttributes
 {
   public id!: number;
-  public nombre!: string;
+  public name!: string;
   public email!: string;
   public password!: string;
   public googleId?: string | null;
-  public telefono?: string | null;
+  public phone?: string | null;
   public roleId?: number | null;
   public createdAt?: Date;
   public updatedAt?: Date;
@@ -28,7 +28,7 @@ User.init(
       primaryKey: true,
       type: DataTypes.INTEGER,
     },
-    nombre: {
+    name: {
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -43,7 +43,7 @@ User.init(
     googleId: {
       type: DataTypes.STRING,
     },
-    telefono: {
+    phone: {
       type: DataTypes.STRING,
     },
     roleId: {

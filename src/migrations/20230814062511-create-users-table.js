@@ -9,7 +9,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      nombre: {
+      name: {
         type: Sequelize.STRING,
         allowNull: false,
       },
@@ -22,10 +22,10 @@ module.exports = {
         allowNull: false,
       },
       googleId: {
-        type: Sequelize.STRING, // Campo para el inicio de sesión con Google
+        type: Sequelize.STRING,
       },
-      telefono: {
-        type: Sequelize.STRING, // Campo para el número de teléfono
+      phone: {
+        type: Sequelize.STRING,
       },
       roleId: {
         type: Sequelize.INTEGER,

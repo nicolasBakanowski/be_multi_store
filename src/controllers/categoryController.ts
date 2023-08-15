@@ -10,7 +10,6 @@ async function createCategoryController(req: Request, res: Response) {
     const newCategory = await createCategoryService(name);
     res.status(201).json(newCategory);
   } catch (error) {
-    console.log("este es el error", error);
     res.status(500).json({ error: "Error creating category" });
   }
 }
@@ -19,7 +18,6 @@ async function getAllCategoriesController(req: Request, res: Response) {
     const categories = await getAllCategoriesService();
     res.status(200).json(categories);
   } catch (error) {
-    console.log("este es el error", error);
     res.status(500).json({ error: "Error fetching categories" });
   }
 }

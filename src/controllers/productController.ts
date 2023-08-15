@@ -24,18 +24,15 @@ async function createProductController(req: Request, res: Response) {
     const newProduct = await createProductService(productData);
     res.status(201).json(newProduct);
   } catch (error) {
-    console.log("este es el error", error);
     res.status(500).json({ error: "Error creating product" });
   }
 }
 
 async function getAllProductsController(req: Request, res: Response) {
   try {
-    console.log("entro por aca");
     const products = await getAllProductsService();
     res.status(200).json(products);
   } catch (error) {
-    console.log("este es el error", error);
     res.status(500).json({ error: "Error fetching products" });
   }
 }
@@ -50,7 +47,6 @@ async function getProductByIdController(req: Request, res: Response) {
       res.status(200).json(product);
     }
   } catch (error) {
-    console.log("este es el error", error);
     res.status(500).json({ error: "Error fetching product by ID" });
   }
 }
