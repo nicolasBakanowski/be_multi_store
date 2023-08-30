@@ -3,9 +3,9 @@ import {
   getAllCategoriesFromDB,
 } from "../repositories/categoryRepository";
 
-async function createCategoryService(name: string) {
+async function createCategoryService(name: string, imageUrl: string) {
   try {
-    const newCategory = await createCategoryInDB({ name });
+    const newCategory = await createCategoryInDB({ name, imageUrl });
     return newCategory;
   } catch (error) {
     throw new Error("Error creating category");

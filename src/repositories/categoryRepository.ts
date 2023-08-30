@@ -1,6 +1,9 @@
 import Category from "../models/categoryModel";
 
-async function createCategoryInDB(categoryData: { name: string }) {
+async function createCategoryInDB(categoryData: {
+  name: string;
+  imageUrl: string;
+}) {
   try {
     const newCategory = await Category.create(categoryData);
     return newCategory;

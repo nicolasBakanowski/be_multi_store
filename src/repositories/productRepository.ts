@@ -27,5 +27,23 @@ async function getProductByIdFromDB(productId: number) {
     throw new Error("Error fetching product by ID from the database");
   }
 }
+async function getProductsByCategoryFromDB(categoryId: number) {
+  try {
+    const products = await Product.findAll({
+      attributes: { exclude: ["createdAt", "updatedAt"] },
+      where: {
+        categoryId: categoryId,
+      },
+    });
+    return products;
+  } catch (error) {
+    throw new Error("Error fetching products by category from the database");
+  }
+}
 
-export { createProductInDB, getAllProductsFromDB, getProductByIdFromDB };
+export {
+  createProductInDB,
+  getAllProductsFromDB,
+  getProductByIdFromDB,
+  getProductsByCategoryFromDB,
+};

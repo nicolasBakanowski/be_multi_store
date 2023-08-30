@@ -7,20 +7,23 @@ function imageProcessFunction(
   file: Express.Multer.File,
   cb: (error: Error | null, filename: string) => void
 ) {
-  const productName = req.body.name;
-  const ext = path.extname(file.originalname);
-  const filename = productName + ext;
-  cb(null, filename);
+  cb(null, file.originalname);
+}
+
+function imageDestination(
+  req: Request,
+  _file: Express.Multer.File,
+  cb: (error: Error | null, destination: string) => void
+) {
+  const itemType = req.baseUrl.split("/")[1];
+  console.log(itemType, "itemType");
+  const destination = `uploads/${itemType}/`;
+  console.log("destination", destination);
+  cb(null, destination);
 }
 
 export const imageStorage = multer.diskStorage({
-  destination: function (
-    req: Express.Request,
-    file: Express.Multer.File,
-    cb: (error: Error | null, destination: string) => void
-  ) {
-    cb(null, "uploads/");
-  },
+  destination: imageDestination,
   filename: imageProcessFunction,
 });
 

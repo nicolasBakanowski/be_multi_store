@@ -6,10 +6,11 @@ import {
   findUserByEmail,
 } from "../repositories/userRepository";
 import { TokenPayload } from "../interfaces/tokenPayload";
+import User from "../models/userModel";
 async function loginUserService(
   email: string,
   password: string
-): Promise<string | null> {
+): Promise<{ user: User; token: string } | null> {
   try {
     const user = await findUserByEmail(email);
     if (!user) {
@@ -25,18 +26,18 @@ async function loginUserService(
       name: user.name,
       email: user.email,
       roleId: user.roleId,
-      // Otros campos del usuario que quieras incluir en el token
     };
     const token = generateToken(tokenPayload);
 
-    return token;
+    return { user, token };
   } catch (error) {
-    throw new Error("Error during login");
+    return null;
   }
 }
 
 async function registerUserService(userData: UserAttributes) {
   try {
+    console.log("entra al service", userData);
     const existingUser = await findUserByEmail(userData.email);
     if (existingUser) {
       throw new Error("User with this email already exists");

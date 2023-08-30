@@ -33,6 +33,4 @@ async function registerUserController(req: Request, res: Response) {
   }
 }
 
-export { registerUserController };
-
-export { loginController };
+export { registerUserController, loginController };
