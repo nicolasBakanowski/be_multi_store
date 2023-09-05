@@ -1,4 +1,4 @@
-# Tu Proyecto - Backend
+# Multi-Store - Backend
 
 Este es el backend de la aplicación Tu Proyecto. Este README te guiará a través de los pasos para configurar y ejecutar el backend de la aplicación.
 
