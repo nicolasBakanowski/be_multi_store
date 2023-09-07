@@ -4,11 +4,11 @@ import cors from "cors";
 import compression from "compression";
 import morgan from "morgan";
 import path from "path";
-
 import helmetCsp from "helmet-csp";
 import rateLimit from "express-rate-limit";
 import bodyParser from "body-parser";
 import categoryRoute from "./routes/categoryRoute";
+import orderRoute from "./routes/orderRoute";
 import productRoute from "./routes/productRoute";
 import userRoute from "./routes/usersRoute";
 const app = express();
@@ -43,6 +43,7 @@ app.use(
 app.use("/category", categoryRoute);
 app.use("/product", productRoute);
 app.use("/user", userRoute);
+app.use("/order", orderRoute);
 
 app.listen(PORT, () => {
   console.log(`Servidor escuchando en el puerto ${PORT}`);
