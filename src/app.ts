@@ -1,4 +1,6 @@
 import express from "express";
+import { createServer } from "http";
+import { Server, Socket } from "socket.io";
 import helmet from "helmet";
 import cors from "cors";
 import compression from "compression";
@@ -20,7 +22,14 @@ app.use(cors());
 app.use(express.json());
 app.use(compression());
 app.use(helmetCsp());
+const server = createServer(app);
 
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:3000",
+    credentials: true,
+  },
+});
 // Config express-rate-limit
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 min
@@ -45,6 +54,16 @@ app.use("/product", productRoute);
 app.use("/user", userRoute);
 app.use("/order", orderRoute);
 
-app.listen(PORT, () => {
+io.on("connect", (socket: Socket) => {
+  console.log("Cliente conectado:", socket.id);
+
+  socket.on("enviar mensaje", (message) => {
+    console.log(`Mensaje recibido: ${message}`);
+
+    // Emitir el mensaje a todos los clientes conectados, incluido el remitente
+    io.emit("nuevo mensaje", "este es un mensaje desde el back");
+  });
+});
+server.listen(PORT, () => {
   console.log(`Servidor escuchando en el puerto ${PORT}`);
 });
