@@ -5,8 +5,6 @@ class Category extends Model {
   public id!: number;
   public name!: string;
   public imageUrl!: string;
-
-  // Otras propiedades y métodos del modelo
 }
 
 Category.init(

@@ -1,13 +1,28 @@
-import Product from "../models/productModel";
-import Order from "../models/orderModel";
-import { OrderItem } from "sequelize";
 import { OrderAttributes } from "../interfaces/orderInterface";
 import { createOrderInDB } from "../repositories/orderRepostity";
+import { createOrderProduct } from "../repositories/orderProductsRepository";
+import { OrderProductAttributes } from "../interfaces/orderProductInterface";
 
-async function createOrderService(orderData: OrderAttributes) {
+async function createOrderService(
+  orderData: OrderAttributes,
+  simplifiedCartItems: any
+) {
   try {
-    console.log("service", orderData);
     const newOrder = await createOrderInDB(orderData);
+    console.log(simplifiedCartItems, "simplifiedCartItems");
+    if (newOrder) {
+      console.log(simplifiedCartItems, "simplifiedCartItems");
+      for (const cartItem of simplifiedCartItems) {
+        const { id: productId, cantidad: quantity } = cartItem;
+        const orderProductData: OrderProductAttributes = {
+          id: 0,
+          orderId: newOrder.id,
+          productId,
+          quantity,
+        };
+        await createOrderProduct(orderProductData);
+      }
+    }
     return newOrder;
   } catch (error) {
     console.log(error, "estees el error ");

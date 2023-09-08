@@ -12,9 +12,6 @@ class Product extends Model<ProductAttributes> implements ProductAttributes {
   public imageUrl!: string;
   public categoryId!: number;
 
-  // Otras propiedades y métodos del modelo
-
-  // Define la asociación con la tabla de categorías
   public category!: Category;
 }
 
