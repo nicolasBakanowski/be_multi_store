@@ -13,6 +13,8 @@ import categoryRoute from "./routes/categoryRoute";
 import orderRoute from "./routes/orderRoute";
 import productRoute from "./routes/productRoute";
 import userRoute from "./routes/usersRoute";
+import orderSocket from "./sockets/orderSocket";
+
 const app = express();
 const PORT = process.env.PORT || 30001;
 app.use(bodyParser.json());
@@ -54,16 +56,9 @@ app.use("/product", productRoute);
 app.use("/user", userRoute);
 app.use("/order", orderRoute);
 
-io.on("connect", (socket: Socket) => {
-  console.log("Cliente conectado:", socket.id);
+orderSocket(io);
 
-  socket.on("enviar mensaje", (message) => {
-    console.log(`Mensaje recibido: ${message}`);
-
-    // Emitir el mensaje a todos los clientes conectados, incluido el remitente
-    io.emit("nuevo mensaje", "este es un mensaje desde el back");
-  });
-});
 server.listen(PORT, () => {
   console.log(`Servidor escuchando en el puerto ${PORT}`);
 });
+export { io };
