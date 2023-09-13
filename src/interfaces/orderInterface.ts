@@ -15,6 +15,7 @@ interface OrderAttributes {
   id: number;
   userInfo: UserInfo;
   extraCommentary: string;
+  statusId: number;
 }
 interface OrderData {
   userInfo: UserInfo;

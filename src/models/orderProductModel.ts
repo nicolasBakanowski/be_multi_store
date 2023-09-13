@@ -1,6 +1,7 @@
 import { DataTypes, Model, Sequelize } from "sequelize";
 import sequelize from "../db";
 import { OrderProductAttributes } from "../interfaces/orderProductInterface";
+import Product from "./productModel";
 
 class OrderProductModel
   extends Model<OrderProductAttributes>
@@ -10,6 +11,7 @@ class OrderProductModel
   public orderId!: number;
   public productId!: number;
   public quantity!: number;
+  public product!: Product;
 }
 
 OrderProductModel.init(
@@ -25,7 +27,10 @@ OrderProductModel.init(
     },
     productId: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      references: {
+        model: Product,
+        key: "id",
+      },
     },
     quantity: {
       type: DataTypes.INTEGER,
@@ -34,8 +39,8 @@ OrderProductModel.init(
   },
   {
     sequelize,
-    modelName: "OrderProduct",
+    modelName: "OrderProducts",
   }
 );
-
+OrderProductModel.belongsTo(Product, { foreignKey: "productId" });
 export default OrderProductModel;

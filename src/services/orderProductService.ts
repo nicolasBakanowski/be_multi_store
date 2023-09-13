@@ -2,7 +2,10 @@ import {
   OrderProductAttributes,
   NewOrderPrduct,
 } from "../interfaces/orderProductInterface";
-import { createOrderProduct } from "../repositories/orderProductsRepository";
+import {
+  createOrderProduct,
+  getAllProductsByOrderfromBd,
+} from "../repositories/orderProductsRepository";
 
 async function createOrderProductService(
   orderId: number,
@@ -20,4 +23,13 @@ async function createOrderProductService(
     await createOrderProduct(orderProductData);
   }
 }
-export { createOrderProductService };
+async function getAllOrderProductsService(orderId: number) {
+  const products = await getAllProductsByOrderfromBd(orderId);
+  const productsFormatted = await Promise.all(
+    products.map(async (orderProduct) => {
+      return orderProduct.dataValues;
+    })
+  );
+  return productsFormatted;
+}
+export { createOrderProductService, getAllOrderProductsService };

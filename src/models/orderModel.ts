@@ -5,11 +5,14 @@ import {
   OrderData,
   UserInfo,
 } from "../interfaces/orderInterface";
+import Status from "../models/statusModel";
 
 class Order extends Model<OrderAttributes> implements OrderAttributes {
   public id!: number;
   public userInfo!: UserInfo;
   public extraCommentary!: string;
+  public statusId!: number;
+  public status!: Status;
 }
 
 Order.init(
@@ -26,6 +29,14 @@ Order.init(
     extraCommentary: {
       type: DataTypes.STRING,
       allowNull: true,
+    },
+    statusId: {
+      type: DataTypes.INTEGER,
+      allowNull: true, // Puede ser nulo si lo deseas
+      references: {
+        model: "Status",
+        key: "id",
+      },
     },
   },
   {

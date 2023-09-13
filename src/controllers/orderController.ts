@@ -1,8 +1,11 @@
 import { Request, Response } from "express";
 import { createOrderService } from "../services/orderService";
 import { OrderAttributes } from "../interfaces/orderInterface";
-import { createOrderProductService } from "../services/orderProductService";
-import { io } from "../app"; // Importa la instancia de io desde app.ts
+import {
+  createOrderProductService,
+  getAllOrderProductsService,
+} from "../services/orderProductService";
+import { io } from "../app";
 
 async function createOrderController(req: Request, res: Response) {
   try {
@@ -11,20 +14,27 @@ async function createOrderController(req: Request, res: Response) {
       id: 0,
       userInfo: userInfo,
       extraCommentary: "",
+      statusId: 1,
     };
     const newOrder = await createOrderService(orderData);
-    const productsInOrder = await createOrderProductService(
+    const createproductsInOrder = await createOrderProductService(
       newOrder.id,
       simplifiedCartItems
     );
-    io.emit("newOrder", newOrder);
-    return res.status(201).json(productsInOrder);
+    const allProductsInOrder = await getAllOrderProductsService(newOrder.id);
+    const orderWithProducts = {
+      newOrder,
+      productsInOrder: allProductsInOrder,
+    };
+    io.emit("newOrder", JSON.stringify(orderWithProducts));
+    return res.status(200).json({ status: "OK" });
   } catch (error) {
-    console.error("Error creating category:", error);
+    console.error("Error:", error);
     return res
       .status(500)
-      .json({ error: "An error occurred while creating the category" });
+      .json({ error: "An error occurred while creating the orders" });
   }
 }
+async function getAllOrdersController() {}
 
-export { createOrderController };
+export { createOrderController, getAllOrdersController };
