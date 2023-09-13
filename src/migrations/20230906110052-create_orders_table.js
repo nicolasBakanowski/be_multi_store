@@ -8,17 +8,29 @@ module.exports = {
         primaryKey: true,
         autoIncrement: true,
       },
-      userInfo: {
-        type: Sequelize.JSON,
+      name: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      phone: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      address: {
+        type: Sequelize.STRING,
         allowNull: true,
       },
       extraCommentary: {
         type: Sequelize.STRING,
         allowNull: true,
       },
+      delivery: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
+      },
       statusId: {
         type: Sequelize.INTEGER,
-        allowNull: true, // Puede ser nulo si lo deseas
+        allowNull: false,
         references: {
           model: "Status",
           key: "id",

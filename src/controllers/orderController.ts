@@ -12,7 +12,10 @@ async function createOrderController(req: Request, res: Response) {
     const { deliveryMethod, userInfo, simplifiedCartItems } = req.body;
     const orderData: OrderAttributes = {
       id: 0,
-      userInfo: userInfo,
+      name: userInfo.name,
+      phone: userInfo.phone,
+      address: userInfo.address,
+      delivery: true,
       extraCommentary: "",
       statusId: 1,
     };

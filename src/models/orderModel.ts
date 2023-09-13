@@ -1,16 +1,15 @@
 import { DataTypes, Model } from "sequelize";
 import sequelize from "../db";
-import {
-  OrderAttributes,
-  OrderData,
-  UserInfo,
-} from "../interfaces/orderInterface";
+import { OrderAttributes } from "../interfaces/orderInterface";
 import Status from "../models/statusModel";
 
 class Order extends Model<OrderAttributes> implements OrderAttributes {
   public id!: number;
-  public userInfo!: UserInfo;
   public extraCommentary!: string;
+  public name!: string | null;
+  public phone!: string | null;
+  public address!: string | null;
+  public delivery!: boolean;
   public statusId!: number;
   public status!: Status;
 }
@@ -22,17 +21,29 @@ Order.init(
       autoIncrement: true,
       primaryKey: true,
     },
-    userInfo: {
-      type: DataTypes.JSONB,
-      allowNull: true,
-    },
     extraCommentary: {
       type: DataTypes.STRING,
       allowNull: true,
     },
+    name: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    phone: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    address: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    delivery: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
     statusId: {
       type: DataTypes.INTEGER,
-      allowNull: true, // Puede ser nulo si lo deseas
+      allowNull: true,
       references: {
         model: "Status",
         key: "id",
