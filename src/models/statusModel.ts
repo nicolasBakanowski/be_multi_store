@@ -17,6 +17,7 @@ Status.init(
   {
     sequelize,
     modelName: "Status",
+    tableName: "Status",
   }
 );
 

@@ -13,6 +13,7 @@ import categoryRoute from "./routes/categoryRoute";
 import orderRoute from "./routes/orderRoute";
 import productRoute from "./routes/productRoute";
 import userRoute from "./routes/usersRoute";
+import statusRoute from "./routes/statusRoute";
 import orderSocket from "./sockets/orderSocket";
 
 const app = express();
@@ -55,6 +56,7 @@ app.use("/category", categoryRoute);
 app.use("/product", productRoute);
 app.use("/user", userRoute);
 app.use("/order", orderRoute);
+app.use("/status", statusRoute);
 
 orderSocket(io);
 
