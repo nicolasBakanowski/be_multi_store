@@ -37,7 +37,6 @@ async function loginUserService(
 
 async function registerUserService(userData: UserAttributes) {
   try {
-    console.log("entra al service", userData);
     const existingUser = await findUserByEmail(userData.email);
     if (existingUser) {
       throw new Error("User with this email already exists");

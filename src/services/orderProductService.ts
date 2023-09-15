@@ -6,6 +6,7 @@ import {
   createOrderProduct,
   getAllProductsByOrderfromBd,
 } from "../repositories/orderProductsRepository";
+import { getAllOrderFormDB } from "../repositories/orderProductsRepository";
 
 async function createOrderProductService(
   orderId: number,
@@ -23,7 +24,7 @@ async function createOrderProductService(
     await createOrderProduct(orderProductData);
   }
 }
-async function getAllOrderProductsService(orderId: number) {
+async function getAllOrderProductsByIdService(orderId: number) {
   const products = await getAllProductsByOrderfromBd(orderId);
   const productsFormatted = await Promise.all(
     products.map(async (orderProduct) => {
@@ -32,4 +33,16 @@ async function getAllOrderProductsService(orderId: number) {
   );
   return productsFormatted;
 }
-export { createOrderProductService, getAllOrderProductsService };
+async function getAllOrdersProductService() {
+  try {
+    const orders = await getAllOrderFormDB();
+    return orders;
+  } catch (error) {
+    throw new Error("Error get Order");
+  }
+}
+export {
+  createOrderProductService,
+  getAllOrderProductsByIdService,
+  getAllOrdersProductService,
+};

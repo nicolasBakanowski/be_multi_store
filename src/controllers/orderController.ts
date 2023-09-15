@@ -3,7 +3,8 @@ import { createOrderService } from "../services/orderService";
 import { OrderAttributes } from "../interfaces/orderInterface";
 import {
   createOrderProductService,
-  getAllOrderProductsService,
+  getAllOrderProductsByIdService,
+  getAllOrdersProductService,
 } from "../services/orderProductService";
 import { io } from "../app";
 
@@ -24,12 +25,14 @@ async function createOrderController(req: Request, res: Response) {
       newOrder.id,
       simplifiedCartItems
     );
-    const allProductsInOrder = await getAllOrderProductsService(newOrder.id);
+    const allProductsInOrder = await getAllOrderProductsByIdService(
+      newOrder.id
+    );
     const orderWithProducts = {
       newOrder,
       productsInOrder: allProductsInOrder,
     };
-    io.emit("newOrder", JSON.stringify(orderWithProducts));
+    io.emit("newOrder", orderWithProducts);
     return res.status(200).json({ status: "OK" });
   } catch (error) {
     console.error("Error:", error);
@@ -38,6 +41,15 @@ async function createOrderController(req: Request, res: Response) {
       .json({ error: "An error occurred while creating the orders" });
   }
 }
-async function getAllOrdersController() {}
-
+async function getAllOrdersController(req: Request, res: Response) {
+  try {
+    const orders = await getAllOrdersProductService();
+    return res.status(200).json(orders);
+  } catch (error) {
+    console.error("Error:", error);
+    return res
+      .status(500)
+      .json({ error: "An error occurred while fetching the orders" });
+  }
+}
 export { createOrderController, getAllOrdersController };
