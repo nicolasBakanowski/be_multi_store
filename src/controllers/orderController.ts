@@ -6,6 +6,7 @@ import {
   getAllOrderProductsByIdService,
   getAllOrdersProductService,
 } from "../services/orderProductService";
+import { changeOrderStatusService } from "../services/orderService";
 import { io } from "../app";
 
 async function createOrderController(req: Request, res: Response) {
@@ -52,4 +53,19 @@ async function getAllOrdersController(req: Request, res: Response) {
       .json({ error: "An error occurred while fetching the orders" });
   }
 }
-export { createOrderController, getAllOrdersController };
+
+async function changeOrderStatusController(req: Request, res: Response) {
+  try {
+    const { statusId } = req.body;
+    const orderId = parseInt(req.params.id, 10);
+    const status = await changeOrderStatusService(orderId, statusId);
+    res.status(200).json(status);
+  } catch (error) {
+    res.status(500).json({ error: "Error fetching categories" });
+  }
+}
+export {
+  createOrderController,
+  getAllOrdersController,
+  changeOrderStatusController,
+};

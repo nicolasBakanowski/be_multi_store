@@ -1,5 +1,8 @@
 import { OrderAttributes } from "../interfaces/orderInterface";
-import { createOrderInDB } from "../repositories/orderRepostity";
+import {
+  createOrderInDB,
+  changeOrderStatutInDB,
+} from "../repositories/orderRepostity";
 
 async function createOrderService(orderData: OrderAttributes) {
   try {
@@ -9,5 +12,13 @@ async function createOrderService(orderData: OrderAttributes) {
     throw new Error("Error creating Order");
   }
 }
+async function changeOrderStatusService(idOrder: number, idStatus: number) {
+  try {
+    const order = await changeOrderStatutInDB(idOrder, idStatus);
+    return order;
+  } catch (error) {
+    throw new Error("Error creating Order");
+  }
+}
 
-export { createOrderService };
+export { createOrderService, changeOrderStatusService };
