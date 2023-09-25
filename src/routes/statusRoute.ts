@@ -1,6 +1,6 @@
 import express from "express";
 import { getAllStatusController } from "../controllers/statusController";
 
-const statuRoute = express.Router();
-statuRoute.get("/", getAllStatusController);
-export default statuRoute;
+const statusRoute = express.Router();
+statusRoute.get("/", getAllStatusController);
+export default statusRoute;
