@@ -2,6 +2,7 @@ import OrderProduct from "../models/orderProductModel";
 import { OrderProductAttributes } from "../interfaces/orderProductInterface"; // Ajusta las importaciones según sea necesario
 import Product from "../models/productModel";
 import Order from "../models/orderModel";
+import { Op } from "sequelize";
 
 async function createOrderProduct(orderProductData: OrderProductAttributes) {
   return await OrderProduct.create(orderProductData);
@@ -29,6 +30,11 @@ async function getAllProductsByOrderfromBd(orderId: number) {
             "statusId",
             "delivery",
           ],
+          where: {
+            statusId: {
+              [Op.in]: [1, 2, 3],
+            },
+          },
         },
       ],
     });
@@ -57,6 +63,11 @@ async function getAllOrderFormDB() {
             "statusId",
             "delivery",
           ],
+          where: {
+            statusId: {
+              [Op.in]: [1, 2, 3],
+            },
+          },
         },
       ],
     });
