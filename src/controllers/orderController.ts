@@ -59,6 +59,7 @@ async function changeOrderStatusController(req: Request, res: Response) {
     const { statusId } = req.body;
     const orderId = parseInt(req.params.id, 10);
     const status = await changeOrderStatusService(orderId, statusId);
+    io.emit("orderStatusChanged", status);
     res.status(200).json(status);
   } catch (error) {
     res.status(500).json({ error: "Error fetching categories" });
