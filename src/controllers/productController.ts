@@ -10,7 +10,16 @@ import { ProductAttributes } from "../interfaces/productInterface";
 
 async function createProductController(req: Request, res: Response) {
   try {
-    const { name, description, stock, price, imageUrl, categoryId } = req.body;
+    const {
+      name,
+      description,
+      stock,
+      price,
+      imageUrl,
+      categoryId,
+      shortDescription,
+      available,
+    } = req.body;
     const productData: ProductAttributes = {
       id: 0,
       name,
@@ -19,6 +28,8 @@ async function createProductController(req: Request, res: Response) {
       price,
       imageUrl,
       categoryId,
+      shortDescription,
+      available,
     };
     if (req.file) {
       productData.imageUrl = `${req.protocol}://${req.get(

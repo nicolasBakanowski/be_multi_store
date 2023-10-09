@@ -16,6 +16,10 @@ module.exports = {
         type: Sequelize.TEXT,
         allowNull: false,
       },
+      shortDescription: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
       stock: {
         type: Sequelize.INTEGER,
         allowNull: false,
@@ -28,10 +32,15 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
+      available: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: true,
+      },
       categoryId: {
         type: Sequelize.INTEGER,
         references: {
-          model: "Categories", // Asegúrate de que coincida con el nombre de tu tabla de categorías
+          model: "Categories",
           key: "id",
         },
         onUpdate: "CASCADE",

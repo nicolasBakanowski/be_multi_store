@@ -14,22 +14,12 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        name: "rechazado",
+        name: "terminado",
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
-        name: "en camino",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-      {
-        name: "listo en el local",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-      {
-        name: "devolucion",
+        name: "terminado",
         createdAt: new Date(),
         updatedAt: new Date(),
       },
