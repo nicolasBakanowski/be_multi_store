@@ -7,10 +7,12 @@ class Product extends Model<ProductAttributes> implements ProductAttributes {
   public id!: number;
   public name!: string;
   public description!: string;
+  public shortDescription!: string; // Nuevo campo
   public stock!: number;
   public price!: number;
   public imageUrl!: string;
   public categoryId!: number;
+  public available!: boolean; // Nuevo campo
 
   public category!: Category;
 }
@@ -48,6 +50,15 @@ Product.init(
         model: Category,
         key: "id",
       },
+    },
+    shortDescription: {
+      type: DataTypes.STRING, // Puedes ajustar el tipo de datos según tus necesidades
+      allowNull: true, // Cambia a "false" si quieres que sea obligatorio
+    },
+    available: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false, // Cambia a "true" si quieres que sea obligatorio
+      defaultValue: true, // Valor por defecto, por ejemplo, "true" para productos nuevos
     },
   },
   {
