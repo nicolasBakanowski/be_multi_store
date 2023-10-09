@@ -15,7 +15,7 @@ import productRoute from "./routes/productRoute";
 import userRoute from "./routes/usersRoute";
 import statusRoute from "./routes/statusRoute";
 import orderSocket from "./sockets/orderSocket";
-
+import * as dotenv from "dotenv";
 const app = express();
 const PORT = process.env.PORT || 30001;
 app.use(bodyParser.json());
@@ -26,18 +26,21 @@ app.use(express.json());
 app.use(compression());
 app.use(helmetCsp());
 const server = createServer(app);
+dotenv.config();
 
 const io = new Server(server, {
   cors: {
-    origin: ["http://192.168.0.46:3000", "http://localhost:3000"],
+    origin: [process.env.IPLOCALHOST || "", process.env.IPCLIENTHOST || ``],
     credentials: true,
   },
 });
+
 // Config express-rate-limit
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 min
   max: 100, // request limit per IP
 });
+
 app.use(limiter);
 // Usar morgan para registrar solicitudes
 //app.use(morgan("combined"));
