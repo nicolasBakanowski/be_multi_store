@@ -20,6 +20,10 @@ const app = express();
 const PORT = process.env.PORT || 30001;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use((req, res, next) => {
+  res.setHeader("Origin-Agent-Cluster", "?1");
+  next();
+});
 app.use(helmet());
 app.use(cors());
 app.use(express.json());
