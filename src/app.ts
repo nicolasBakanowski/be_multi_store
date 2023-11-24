@@ -53,6 +53,9 @@ app.use(
   "/uploads/category",
   express.static(path.join(__dirname, "..", "uploads", "category"))
 );
+app.get("/test", (req, res) => {
+  res.status(200).json({ message: "¡La prueba fue exitosa!" });
+});
 
 app.use("/category", categoryRoute);
 app.use("/product", productRoute);
