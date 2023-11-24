@@ -30,7 +30,7 @@ dotenv.config();
 
 const io = new Server(server, {
   cors: {
-    origin: [process.env.IPLOCALHOST || "", process.env.IPCLIENTHOST || ``],
+    //origin: [process.env.IPLOCALHOST || "", process.env.IPCLIENTHOST || ``],
     credentials: true,
   },
 });
