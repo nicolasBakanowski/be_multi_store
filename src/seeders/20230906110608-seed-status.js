@@ -18,11 +18,6 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date(),
       },
-      {
-        name: "terminado",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
     ]);
   },
 
