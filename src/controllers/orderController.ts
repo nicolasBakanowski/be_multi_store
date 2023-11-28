@@ -21,7 +21,9 @@ async function createOrderController(req: Request, res: Response) {
       extraCommentary: "",
       statusId: 1,
     };
+    console.log("nueva ORder:", orderData);
     const newOrder = await createOrderService(orderData);
+    console.log("newOrder:", orderData);
     const createproductsInOrder = await createOrderProductService(
       newOrder.id,
       simplifiedCartItems
@@ -33,6 +35,7 @@ async function createOrderController(req: Request, res: Response) {
       newOrder,
       productsInOrder: allProductsInOrder,
     };
+    console.log("variable orderWithProducts:", orderWithProducts);
     io.emit("newOrder", orderWithProducts);
     return res.status(200).json({ status: "OK" });
   } catch (error) {

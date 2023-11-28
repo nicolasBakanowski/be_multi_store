@@ -9,7 +9,8 @@ async function createOrderService(orderData: OrderAttributes) {
     const newOrder = await createOrderInDB(orderData);
     return newOrder;
   } catch (error) {
-    throw new Error("Error creating Order");
+    console.log("aver si salta la bronca", error);
+    throw new Error("Error creating Order createOrderService");
   }
 }
 async function changeOrderStatusService(idOrder: number, idStatus: number) {
@@ -17,7 +18,7 @@ async function changeOrderStatusService(idOrder: number, idStatus: number) {
     const order = await changeOrderStatutInDB(idOrder, idStatus);
     return order;
   } catch (error) {
-    throw new Error("Error creating Order");
+    throw new Error("Error creating Order changeOrderStatusService");
   }
 }
 
