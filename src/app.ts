@@ -34,8 +34,7 @@ dotenv.config();
 
 const io = new Server(server, {
   cors: {
-    origin: "https://multi-store-git-develop-nicolasbakanowski.vercel.app",
-    methods: ["GET", "POST"],
+    //origin: [process.env.IPLOCALHOST || "", process.env.IPCLIENTHOST || ``],
     credentials: true,
   },
 });
