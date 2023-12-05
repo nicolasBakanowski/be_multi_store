@@ -8,7 +8,12 @@ function imageProcessFunction(
   file: Express.Multer.File,
   cb: (error: Error | null, filename: string) => void
 ) {
-  cb(null, file.originalname);
+  try {
+    cb(null, file.originalname);
+  } catch (error) {
+    console.error("Error in imageProcessFunction:", error);
+    cb(null, "");
+  }
 }
 
 function imageDestination(
@@ -16,19 +21,24 @@ function imageDestination(
   _file: Express.Multer.File,
   cb: (error: Error | null, destination: string) => void
 ) {
-  const itemType = req.baseUrl.split("/")[1];
-  console.log(itemType, "itemType");
-  console.log(_file, "tiene un archivo esto? ");
-  const destination = path.join("uploads", itemType);
-  console.log("destination", destination);
-  fs.access(destination, fs.constants.F_OK, (err: any) => {
-    if (err) {
-      console.error("La ruta no existe", err);
-    } else {
-      console.log("La ruta existe");
-    }
-  });
-  cb(null, destination);
+  try {
+    const itemType = req.baseUrl.split("/")[1];
+    const destination = path.resolve("uploads", itemType);
+    console.log("Trying to save in destination:", destination);
+
+    fs.access(destination, fs.constants.F_OK, (err: any) => {
+      if (err) {
+        console.error("Error accessing destination:", err);
+        cb(err, "");
+      } else {
+        console.log("Destination exists, trying to save.");
+        cb(null, destination);
+      }
+    });
+  } catch (error) {
+    console.error("Error in imageDestination:", error);
+    cb(null, "");
+  }
 }
 
 export const imageStorage = multer.diskStorage({
