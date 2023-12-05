@@ -1,6 +1,7 @@
 import multer from "multer";
 import path from "path";
 import { Request } from "express";
+import fs from "fs";
 
 function imageProcessFunction(
   req: Request,
@@ -19,7 +20,7 @@ function imageDestination(
   console.log(itemType, "itemType");
   console.log(_file, "tiene un archivo esto? ");
   const destination = path.join("uploads", itemType);
-  console.log("destination", destination);
+  fs.mkdirSync(destination, { recursive: true });
   cb(null, destination);
 }
 
