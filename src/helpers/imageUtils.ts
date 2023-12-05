@@ -1,7 +1,7 @@
 import multer from "multer";
 import path from "path";
 import { Request } from "express";
-import fs from "fs";
+const fs = require("fs");
 
 function imageProcessFunction(
   req: Request,
@@ -20,7 +20,14 @@ function imageDestination(
   console.log(itemType, "itemType");
   console.log(_file, "tiene un archivo esto? ");
   const destination = path.join("uploads", itemType);
-  fs.mkdirSync(destination, { recursive: true });
+  console.log("destination", destination);
+  fs.access(destination, fs.constants.F_OK, (err: any) => {
+    if (err) {
+      console.error("La ruta no existe", err);
+    } else {
+      console.log("La ruta existe");
+    }
+  });
   cb(null, destination);
 }
 
