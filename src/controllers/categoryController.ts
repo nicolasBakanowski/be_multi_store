@@ -14,7 +14,7 @@ async function createCategoryController(req: Request, res: Response) {
 
     let imageUrl = "";
     if (req.file) {
-      imageUrl = `${req.protocol}://${req.get("host")}/uploads/category/${
+      imageUrl = `${req.protocol}://${req.get("host")}/dist/uploads/category/${
         req.file.originalname
       }`;
     }
