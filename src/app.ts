@@ -61,12 +61,12 @@ const limiter = rateLimit({
 app.use(limiter);
 
 app.use(
-  "/uploads/product",
-  express.static(path.join(__dirname, "..", "uploads", "product"))
+  "/be_multi_store/dist/uploads/product",
+  express.static(path.join(__dirname, "uploads", "product"))
 );
 app.use(
-  "/uploads/category",
-  express.static(path.join(__dirname, "..", "uploads", "category"))
+  "/be_multi_store/dist/uploads/category",
+  express.static(path.join(__dirname, "uploads", "category"))
 );
 
 app.get("/test", (req, res) => {
