@@ -12,10 +12,6 @@ categoryRoute.post(
   "/new",
   authMiddleware,
   isAdminMiddleware,
-  (req, res, next) => {
-    console.log(req.file, "aver como llega esto"); // Agrega un log para ver el objeto de archivo
-    next();
-  },
   upload.single("categoryImage"),
   createCategoryController
 );

@@ -17,6 +17,7 @@ function imageDestination(
 ) {
   const itemType = req.baseUrl.split("/")[1];
   console.log(itemType, "itemType");
+  console.log(_file, "tiene un archivo esto? ");
   const destination = path.join("uploads", itemType);
   console.log("destination", destination);
   cb(null, destination);
