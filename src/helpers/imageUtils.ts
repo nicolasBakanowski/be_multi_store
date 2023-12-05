@@ -17,7 +17,7 @@ function imageDestination(
 ) {
   const itemType = req.baseUrl.split("/")[1];
   console.log(itemType, "itemType");
-  const destination = `uploads/${itemType}/`;
+  const destination = path.join("uploads", itemType);
   console.log("destination", destination);
   cb(null, destination);
 }
