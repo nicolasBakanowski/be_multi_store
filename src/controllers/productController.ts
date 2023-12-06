@@ -34,7 +34,7 @@ async function createProductController(req: Request, res: Response) {
     if (req.file) {
       productData.imageUrl = `${req.protocol}://${req.get(
         "host"
-      )}/uploads/product/${req.file.originalname}`;
+      )}/dist/uploads/product/${req.file.originalname}`;
     }
     const newProduct = await createProductService(productData);
     res.status(201).json(newProduct);
