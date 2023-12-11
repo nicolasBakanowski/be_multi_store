@@ -66,7 +66,7 @@ app.use(
 );
 app.use(
   "/dist/uploads/category/",
-  express.static(path.join(__dirname, "dist", "uploads", "category"))
+  express.static(path.join(__dirname, "uploads", "category"))
 );
 
 app.get("/test", (req, res) => {
