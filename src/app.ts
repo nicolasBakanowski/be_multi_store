@@ -62,11 +62,11 @@ app.use(limiter);
 
 app.use(
   "/dist/uploads/product/",
-  express.static(path.join(__dirname, "..", "uploads", "product"))
+  express.static(path.join(__dirname, "dist", "uploads", "product"))
 );
 app.use(
   "/dist/uploads/category/",
-  express.static(path.join(__dirname, "..", "uploads", "category"))
+  express.static(path.join(__dirname, "dist", "uploads", "category"))
 );
 
 app.get("/test", (req, res) => {
