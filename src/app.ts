@@ -62,11 +62,11 @@ app.use(limiter);
 
 app.use(
   "/dist/uploads/product/",
-  express.static(path.join(__dirname, "dist", "uploads", "product"))
+  express.static(path.join(__dirname, "..", "dist", "uploads", "product"))
 );
 app.use(
   "/dist/uploads/category/",
-  express.static(path.join(__dirname, "dist", "uploads", "category"))
+  express.static(path.join(__dirname, "..", "dist", "uploads", "category"))
 );
 
 app.get("/test", (req, res) => {
@@ -85,6 +85,7 @@ app.use("/status", statusRoute);
 orderSocket(io);
 
 server.listen(PORT, () => {
+  console.log("dirname", __dirname);
   console.log(`Servidor escuchando en el puerto ${PORT}`);
 });
 
