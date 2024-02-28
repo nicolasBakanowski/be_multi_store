@@ -5,6 +5,7 @@ import {
   getAllProductsController,
   getProductByIdController,
   getProductByCategoryController,
+  editProductController
 } from "../controllers/productController";
 import { upload } from "../helpers/imageUtils";
 import { isAdminMiddleware } from "../middleware/isAdminMiddleware";
@@ -18,7 +19,13 @@ productRoute.post(
   upload.single("productImage"),
   createProductController
 );
-
+productRoute.put(
+  "/edit/:id",
+  authMiddleware,
+  isAdminMiddleware,
+  upload.single("productImage"),
+  editProductController
+);
 productRoute.get("/all", getAllProductsController);
 productRoute.get("/:id", getProductByIdController);
 productRoute.get("/category/:categoryId", getProductByCategoryController);
