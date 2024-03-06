@@ -49,7 +49,8 @@ async function editProductInDB(productId: number, updatedProductData: ProductEdi
     if (updatedRowsCount === 0) {
       throw new Error("Product not found");
     }
-    return updatedRows;
+    const product = await getProductByIdFromDB(productId)
+    return product; 
   } catch (error) {
     throw new Error("Error editing product in the database");
   }
