@@ -31,11 +31,7 @@ app.use(helmet());
 
 // Configuración específica de CORS
 app.use(
-  cors({
-    origin: "*",
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    credentials: true,
-  })
+  cors()
 );
 
 app.use(express.json());
