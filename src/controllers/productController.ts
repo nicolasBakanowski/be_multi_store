@@ -5,8 +5,8 @@ import {
   getProductByIdService,
   getProductByCategoryService,
 } from "../services/productService";
-
-import { ProductAttributes } from "../interfaces/productInterface";
+import { editProductService } from "../services/productService";
+import { ProductAttributes,ProductEdit } from "../interfaces/productInterface";
 
 async function createProductController(req: Request, res: Response) {
   try {
@@ -81,6 +81,38 @@ async function getProductByCategoryController(req: Request, res: Response) {
   }
 }
 
+async function editProductController(req: Request, res: Response) {
+  try {
+    const productId = parseInt(req.params.id, 10);
+    const {
+      name,
+      description,
+      stock,
+      price,
+    } = req.body;
+
+    const updatedProductData: ProductEdit = {
+      id: productId,
+      name,
+      description,
+      stock,
+      price,
+    };
+
+    const updatedProduct = await editProductService(productId, updatedProductData);
+
+    if (!updatedProduct) {
+      res.status(404).json({ error: "Product not found" });
+    } else {
+      res.status(200).json(updatedProduct);
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Error editing product" });
+  }
+  
+}
+
+export { editProductController };
 export {
   createProductController,
   getAllProductsController,

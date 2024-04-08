@@ -3,8 +3,9 @@ import {
   getAllProductsFromDB,
   getProductByIdFromDB,
   getProductsByCategoryFromDB,
+  editProductInDB
 } from "../repositories/productRepository";
-import { ProductAttributes } from "../interfaces/productInterface";
+import { ProductAttributes,ProductEdit } from "../interfaces/productInterface";
 
 async function createProductService(productData: ProductAttributes) {
   try {
@@ -40,10 +41,19 @@ async function getProductByCategoryService(categoryId: number) {
     throw new Error("Error fetching product by Category");
   }
 }
+async function editProductService(productId: number, updatedProductData: ProductEdit) {
+  try {
+    const updatedProduct = await editProductInDB(productId, updatedProductData);
+    return updatedProduct;
+  } catch (error) {
+    throw new Error("Error editing product");
+  }
+}
 
 export {
   createProductService,
   getAllProductsService,
   getProductByIdService,
   getProductByCategoryService,
+  editProductService
 };

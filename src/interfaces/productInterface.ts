@@ -9,7 +9,6 @@ export interface ProductAttributes {
   categoryId: number;
   available: boolean;
 }
-
 export interface ProductData {
   name: string;
   description: string;
@@ -19,4 +18,11 @@ export interface ProductData {
   imageUrl: string;
   categoryId: number;
   available: boolean;
+}
+export interface ProductEdit{
+  id: number;
+  name: string;
+  description: string;
+  stock: number;
+  price: number;
 }
