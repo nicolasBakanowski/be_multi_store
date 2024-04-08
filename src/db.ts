@@ -1,8 +1,14 @@
 import { Sequelize } from "sequelize";
+import dotenv from "dotenv";
 
-const sequelize = new Sequelize("mydb", "myuser", "mypassword", {
-  host: "localhost",
-  port: 3306,
+dotenv.config(); 
+const { MYSQL_URL } = process.env;
+
+if (!MYSQL_URL) {
+  throw new Error("La variable de entorno MYSQL_URL no está definida.");
+}
+
+const sequelize = new Sequelize(MYSQL_URL, {
   dialect: "mysql",
 });
 
