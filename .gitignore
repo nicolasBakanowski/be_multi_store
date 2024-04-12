@@ -4,3 +4,4 @@ db-data
 uploads
 DS_STORE
 .env
+.env.local
