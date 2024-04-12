@@ -1,7 +1,14 @@
 import jwt from "jsonwebtoken";
 import { removeBearerPrefix } from "./removeBeaber";
 import { TokenPayload } from "../interfaces/tokenPayload";
-const secretKey = "your-secret-key"; // Cambia esto a tu clave secreta
+import dotenv from "dotenv";
+
+dotenv.config()
+
+if (!process.env.SECRET_KEY) {
+  throw new Error("La variable de entorno SECRET_KEY no está definida.");
+}
+const secretKey = process.env.SECRET_KEY; 
 
 export const generateToken = (payload: TokenPayload): string => {
   const token = jwt.sign(payload, secretKey, { expiresIn: "1h" });
