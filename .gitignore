@@ -2,3 +2,5 @@ node_modules
 dist
 db-data
 uploads
+DS_STORE
+.env
