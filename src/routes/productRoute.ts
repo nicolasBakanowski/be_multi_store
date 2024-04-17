@@ -29,5 +29,6 @@ productRoute.put(
 productRoute.get("/all", getAllProductsController);
 productRoute.get("/:id", getProductByIdController);
 productRoute.get("/category/:categoryId", getProductByCategoryController);
-productRoute.patch("/status/:id",toggleProductStatusController)
+productRoute.patch("/status/:id",authMiddleware,
+isAdminMiddleware,toggleProductStatusController)
 export default productRoute;
