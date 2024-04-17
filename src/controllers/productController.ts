@@ -4,32 +4,16 @@ import {
   getAllProductsService,
   getProductByIdService,
   getProductByCategoryService,
+  toggleProductStatusService,
 } from "../services/productService";
 import { editProductService } from "../services/productService";
 import { ProductAttributes,ProductEdit } from "../interfaces/productInterface";
 
 async function createProductController(req: Request, res: Response) {
   try {
-    const {
-      name,
-      description,
-      stock,
-      price,
-      imageUrl,
-      categoryId,
-      shortDescription,
-      available,
-    } = req.body;
     const productData: ProductAttributes = {
       id: 0,
-      name,
-      description,
-      stock,
-      price,
-      imageUrl,
-      categoryId,
-      shortDescription,
-      available,
+      ...req.body
     };
     if (req.file) {
       productData.imageUrl = `${req.protocol}://${req.get(
@@ -46,7 +30,6 @@ async function createProductController(req: Request, res: Response) {
 async function getAllProductsController(req: Request, res: Response) {
   try {
     const products = await getAllProductsService();
-
     res.status(200).json(products);
   } catch (error) {
     res.status(500).json({ error: "Error fetching products" });
@@ -84,23 +67,7 @@ async function getProductByCategoryController(req: Request, res: Response) {
 async function editProductController(req: Request, res: Response) {
   try {
     const productId = parseInt(req.params.id, 10);
-    const {
-      name,
-      description,
-      stock,
-      price,
-    } = req.body;
-
-    const updatedProductData: ProductEdit = {
-      id: productId,
-      name,
-      description,
-      stock,
-      price,
-    };
-
-    const updatedProduct = await editProductService(productId, updatedProductData);
-
+    const updatedProduct = await editProductService(productId, req.body as ProductEdit);
     if (!updatedProduct) {
       res.status(404).json({ error: "Product not found" });
     } else {
@@ -111,11 +78,36 @@ async function editProductController(req: Request, res: Response) {
   }
   
 }
+async function toggleProductStatusController(req: Request, res: Response) {
+  try {
+    const productId = parseInt(req.params.id, 10);
+    const { active } = req.body; 
+    if (!productId) {
+      return res.status(400).json({ error: "Invalid product ID" });
+    } 
+    const isActive = (typeof active === 'string') ? (active.toLowerCase() === 'true') : active;
+    if (isActive === undefined || typeof isActive !== 'boolean') {
+      return res.status(400).json({ error: "Invalid 'active' status provided" });
+    }
+    const updatedProduct = await toggleProductStatusService(productId, isActive); 
+    if (updatedProduct) {
+      return res.status(200).json({
+        message: `Product ${active ? 'activated' : 'deactivated'} successfully`,
+        product: updatedProduct
+      });
+    } else {
+      return res.status(404).json({ error: "Product not found" });
+    }
+  } catch (error) {
+    return res.status(500).json({ error: "Error updating product status" });
+  }
+}
 
-export { editProductController };
 export {
   createProductController,
   getAllProductsController,
   getProductByIdController,
   getProductByCategoryController,
+  editProductController,
+  toggleProductStatusController,
 };
