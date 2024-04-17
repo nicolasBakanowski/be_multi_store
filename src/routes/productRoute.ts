@@ -1,11 +1,11 @@
 import express from "express";
-import path from "path";
 import {
   createProductController,
   getAllProductsController,
   getProductByIdController,
   getProductByCategoryController,
-  editProductController
+  editProductController,
+  toggleProductStatusController
 } from "../controllers/productController";
 import { upload } from "../helpers/imageUtils";
 import { isAdminMiddleware } from "../middleware/isAdminMiddleware";
@@ -29,5 +29,5 @@ productRoute.put(
 productRoute.get("/all", getAllProductsController);
 productRoute.get("/:id", getProductByIdController);
 productRoute.get("/category/:categoryId", getProductByCategoryController);
-
+productRoute.patch("/status/:id",toggleProductStatusController)
 export default productRoute;

@@ -52,13 +52,13 @@ Product.init(
       },
     },
     shortDescription: {
-      type: DataTypes.STRING, // Puedes ajustar el tipo de datos según tus necesidades
-      allowNull: true, // Cambia a "false" si quieres que sea obligatorio
+      type: DataTypes.STRING, 
+      allowNull: true,
     },
     available: {
       type: DataTypes.BOOLEAN,
-      allowNull: false, // Cambia a "true" si quieres que sea obligatorio
-      defaultValue: true, // Valor por defecto, por ejemplo, "true" para productos nuevos
+      allowNull: false,
+      defaultValue: true,
     },
   },
   {

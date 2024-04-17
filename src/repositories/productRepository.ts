@@ -33,6 +33,7 @@ async function getProductsByCategoryFromDB(categoryId: number) {
       attributes: { exclude: ["createdAt", "updatedAt"] },
       where: {
         categoryId: categoryId,
+        available: true,
       },
     });
     return products;
@@ -40,9 +41,10 @@ async function getProductsByCategoryFromDB(categoryId: number) {
     throw new Error("Error fetching products by category from the database");
   }
 }
+
 async function editProductInDB(productId: number, updatedProductData: ProductEdit) {
   try {
-    const [updatedRowsCount, updatedRows] = await Product.update(updatedProductData, {
+    const [updatedRowsCount] = await Product.update(updatedProductData, {
       where: { id: productId },
       returning: true,
     });
@@ -55,10 +57,26 @@ async function editProductInDB(productId: number, updatedProductData: ProductEdi
     throw new Error("Error editing product in the database");
   }
 }
+
+async function toggleProductStatusInDB(productId: number, active: boolean) {
+  try {
+    const [updatedRowsCount] = await Product.update({ available: active }, {
+      where: { id: productId }
+    });
+    if (updatedRowsCount === 0) {
+      throw new Error("Product not found or already disabled");
+    }
+    return await getProductByIdFromDB(productId);
+  } catch (error) {
+    throw new Error("Error disabling product in the database");
+  }
+}
+
 export {
   createProductInDB,
   getAllProductsFromDB,
   getProductByIdFromDB,
   getProductsByCategoryFromDB,
-  editProductInDB
+  editProductInDB,
+  toggleProductStatusInDB
 };

@@ -3,7 +3,8 @@ import {
   getAllProductsFromDB,
   getProductByIdFromDB,
   getProductsByCategoryFromDB,
-  editProductInDB
+  editProductInDB,
+  toggleProductStatusInDB,
 } from "../repositories/productRepository";
 import { ProductAttributes,ProductEdit } from "../interfaces/productInterface";
 
@@ -49,11 +50,21 @@ async function editProductService(productId: number, updatedProductData: Product
     throw new Error("Error editing product");
   }
 }
+async function toggleProductStatusService(productId: number, active: boolean) {
+  try {
+    const updatedProduct = await toggleProductStatusInDB(productId, active);
+    return updatedProduct;
+  } catch (error) {
+    throw new Error(`Error trying to toggle product status: Service`);
+  }
+}
+
 
 export {
   createProductService,
   getAllProductsService,
   getProductByIdService,
   getProductByCategoryService,
-  editProductService
+  editProductService,
+  toggleProductStatusService
 };
