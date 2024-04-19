@@ -71,6 +71,18 @@ async function toggleProductStatusInDB(productId: number, active: boolean) {
     throw new Error("Error disabling product in the database");
   }
 }
+async function getAllDisabledProductsFromDB() {
+  try {
+    const unavailableProducts = await Product.findAll({
+      where: {
+        available: 0 
+      }
+    });
+    return unavailableProducts;
+  } catch (error) {
+    throw new Error("Error fetching unavailable products from the database");
+  }
+}
 
 export {
   createProductInDB,
@@ -78,5 +90,6 @@ export {
   getProductByIdFromDB,
   getProductsByCategoryFromDB,
   editProductInDB,
-  toggleProductStatusInDB
+  toggleProductStatusInDB,
+  getAllDisabledProductsFromDB
 };

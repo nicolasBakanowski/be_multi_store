@@ -5,7 +5,8 @@ import {
   getProductByIdController,
   getProductByCategoryController,
   editProductController,
-  toggleProductStatusController
+  toggleProductStatusController,
+  getAllDisabledProductsController
 } from "../controllers/productController";
 import { upload } from "../helpers/imageUtils";
 import { isAdminMiddleware } from "../middleware/isAdminMiddleware";
@@ -27,6 +28,7 @@ productRoute.put(
   editProductController
 );
 productRoute.get("/all", getAllProductsController);
+productRoute.get("/disabled",getAllDisabledProductsController)
 productRoute.get("/:id", getProductByIdController);
 productRoute.get("/category/:categoryId", getProductByCategoryController);
 productRoute.patch("/status/:id",authMiddleware,

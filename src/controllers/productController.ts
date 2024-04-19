@@ -5,6 +5,7 @@ import {
   getProductByIdService,
   getProductByCategoryService,
   toggleProductStatusService,
+  getAllDisabledProductsService
 } from "../services/productService";
 import { editProductService } from "../services/productService";
 import { ProductAttributes,ProductEdit } from "../interfaces/productInterface";
@@ -102,7 +103,14 @@ async function toggleProductStatusController(req: Request, res: Response) {
     return res.status(500).json({ error: "Error updating product status" });
   }
 }
-
+async function getAllDisabledProductsController(req: Request, res: Response) {
+  try {
+    const products = await getAllDisabledProductsService();
+    res.status(200).json(products);
+  } catch (error) {
+    res.status(500).json({ error: "Error fetching products" });
+  }
+}
 export {
   createProductController,
   getAllProductsController,
@@ -110,4 +118,5 @@ export {
   getProductByCategoryController,
   editProductController,
   toggleProductStatusController,
+  getAllDisabledProductsController
 };
