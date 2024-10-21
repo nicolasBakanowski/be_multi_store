@@ -7,12 +7,13 @@ class Product extends Model<ProductAttributes> implements ProductAttributes {
   public id!: number;
   public name!: string;
   public description!: string;
-  public shortDescription!: string; // Nuevo campo
+  public shortDescription!: string;
   public stock!: number;
   public price!: number;
   public imageUrl!: string;
   public categoryId!: number;
-  public available!: boolean; // Nuevo campo
+  public available!: boolean;
+  public costPrice!: number; // Agregar el campo costPrice
 
   public category!: Category;
 }
@@ -52,13 +53,18 @@ Product.init(
       },
     },
     shortDescription: {
-      type: DataTypes.STRING, 
+      type: DataTypes.STRING,
       allowNull: true,
     },
     available: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
       defaultValue: true,
+    },
+    costPrice: {
+      type: DataTypes.FLOAT, // Definir costPrice como FLOAT
+      allowNull: false,
+      defaultValue: 0, // Valor predeterminado de 0
     },
   },
   {

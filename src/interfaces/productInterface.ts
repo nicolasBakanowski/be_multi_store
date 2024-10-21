@@ -8,6 +8,7 @@ export interface ProductAttributes {
   imageUrl: string;
   categoryId: number;
   available: boolean;
+  costPrice: number;
 }
 export interface ProductData {
   name: string;
@@ -17,6 +18,7 @@ export interface ProductData {
   price: number;
   imageUrl: string;
   categoryId: number;
+  costPrice: number;
   available: boolean;
 }
 export interface ProductEdit{
@@ -24,5 +26,6 @@ export interface ProductEdit{
   name: string;
   description: string;
   stock: number;
+  costPrice: number;
   price: number;
 }
