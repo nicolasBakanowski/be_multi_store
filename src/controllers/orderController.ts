@@ -11,19 +11,19 @@ import { io } from "../app";
 
 async function createOrderController(req: Request, res: Response) {
   try {
-    const { deliveryMethod, userInfo, simplifiedCartItems } = req.body;
+    const { deliveryMethod, userInfo, simplifiedCartItems,totalAmount,totalCostPrice } = req.body;
     const orderData: OrderAttributes = {
       id: 0,
       name: userInfo.name,
       phone: userInfo.phone,
       address: userInfo.address,
       delivery: true,
+      totalAmount: totalAmount,
+      totalCostPriceAmount: totalCostPrice,
       extraCommentary: "",
       statusId: 1,
     };
-    console.log("nueva ORder:", orderData);
     const newOrder = await createOrderService(orderData);
-    console.log("newOrder:", orderData);
     const createproductsInOrder = await createOrderProductService(
       newOrder.id,
       simplifiedCartItems

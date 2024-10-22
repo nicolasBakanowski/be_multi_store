@@ -18,6 +18,8 @@ interface OrderAttributes {
   address: string | null;
   extraCommentary: string;
   delivery: boolean;
+  totalAmount: number; 
+  totalCostPriceAmount: number;
   statusId: number;
 }
 interface OrderData {
