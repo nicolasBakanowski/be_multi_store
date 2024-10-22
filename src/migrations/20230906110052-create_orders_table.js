@@ -28,6 +28,16 @@ module.exports = {
         type: Sequelize.BOOLEAN,
         defaultValue: false,
       },
+      totalAmount: {
+        type: Sequelize.FLOAT, 
+        allowNull: false,
+        defaultValue: 0,
+      },
+      totalCostPriceAmount: {
+        type: Sequelize.FLOAT, 
+        allowNull: false,
+        defaultValue: 0,
+      },
       statusId: {
         type: Sequelize.INTEGER,
         allowNull: false,

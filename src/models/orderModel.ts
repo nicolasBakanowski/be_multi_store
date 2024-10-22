@@ -11,6 +11,8 @@ class Order extends Model<OrderAttributes> implements OrderAttributes {
   public address!: string | null;
   public delivery!: boolean;
   public statusId!: number;
+  public totalAmount!: number; 
+  public totalCostPriceAmount!: number;
   public status!: Status;
 }
 
@@ -40,6 +42,16 @@ Order.init(
     delivery: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
+    },
+    totalAmount: {
+      type: DataTypes.FLOAT, 
+      allowNull: false,
+      defaultValue: 0, 
+    },
+    totalCostPriceAmount: {
+      type: DataTypes.FLOAT, 
+      allowNull: false,
+      defaultValue: 0,
     },
     statusId: {
       type: DataTypes.INTEGER,
