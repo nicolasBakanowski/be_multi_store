@@ -13,6 +13,8 @@ import orderRoute from "./routes/orderRoute";
 import productRoute from "./routes/productRoute";
 import userRoute from "./routes/usersRoute";
 import statusRoute from "./routes/statusRoute";
+import earningRoute from "./routes/earningRoute";
+
 import orderSocket from "./sockets/orderSocket";
 import * as dotenv from "dotenv";
 
@@ -77,6 +79,8 @@ app.use("/product", productRoute);
 app.use("/user", userRoute);
 app.use("/order", orderRoute);
 app.use("/status", statusRoute);
+app.use("/earning", earningRoute);
+
 
 orderSocket(io);
 
