@@ -12,7 +12,7 @@ interface SimplifiedCartItem {
 }
 
 interface OrderAttributes {
-  id: number;
+  id?: number;
   name: string | null;
   phone: string | null;
   address: string | null;
@@ -21,7 +21,10 @@ interface OrderAttributes {
   totalAmount: number; 
   totalCostPriceAmount: number;
   statusId: number;
+  createdAt?: Date;  
+  updatedAt?: Date; 
 }
+
 interface OrderData {
   userInfo: UserInfo;
   extraCommentary: string;

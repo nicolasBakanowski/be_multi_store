@@ -2,7 +2,7 @@ import { OrderAttributes } from "../interfaces/orderInterface";
 import {
   createOrderInDB,
   changeOrderStatutInDB,
-} from "../repositories/orderRepostity";
+} from "../repositories/orderRepository";
 
 async function createOrderService(orderData: OrderAttributes) {
   try {

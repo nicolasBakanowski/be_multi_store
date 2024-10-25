@@ -1,5 +1,7 @@
 import Order from "../models/orderModel";
 import { OrderAttributes } from "../interfaces/orderInterface";
+import { Op } from "sequelize";
+
 async function createOrderInDB(orderData: OrderAttributes) {
   try {
     const newOrder = await Order.create(orderData);
@@ -21,4 +23,19 @@ async function changeOrderStatutInDB(orderId: number, statusId: number) {
     throw new Error(`Error cambiando el estado de la orden: ${error}`);
   }
 }
-export { createOrderInDB, changeOrderStatutInDB };
+async function findConfirmedOrdersByDate(date: string) {
+  try {
+    const orders = await Order.findAll({
+      where: {
+        createdAt: {
+          [Op.between]: [`${date} 00:00:00`, `${date} 23:59:59`],
+        },
+        statusId: 2,
+      },
+    });
+    return orders;
+  } catch (error) {
+    throw new Error("Error al buscar órdenes confirmadas por fecha");
+  }
+}
+export { createOrderInDB, changeOrderStatutInDB, findConfirmedOrdersByDate };
