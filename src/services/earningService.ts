@@ -16,8 +16,8 @@ import {
       const existingRecord = await findDailyEarningByDate(date);
   
       if (existingRecord) {
-        existingRecord.totalRevenue += totalRevenue;
-        existingRecord.totalCost += totalCost;
+        existingRecord.totalRevenue = totalRevenue;
+        existingRecord.totalCost = totalCost;
         existingRecord.totalProfit = existingRecord.totalRevenue - existingRecord.totalCost;
   
         const updatedRecord = await updateDailyEarningInDB(existingRecord);
