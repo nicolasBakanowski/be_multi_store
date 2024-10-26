@@ -70,7 +70,6 @@ async function getAllDisabledProductsService() {
 }
 async function getTopSellingProductsService() {
   try {
-    console.log("esto es en Service, pero no anda ")
     const topSellingProducts = await getTopSellingProductsFromDB(); 
     return topSellingProducts;
   } catch (error) {

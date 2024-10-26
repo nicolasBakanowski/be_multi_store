@@ -105,7 +105,6 @@ async function getTopSellingProductsFromDB() {
     `);
     return results; 
   } catch (error) {
-    console.error("Error fetching top-selling products:", error);
     throw new Error("Error fetching top-selling products from the database");
   }
 }

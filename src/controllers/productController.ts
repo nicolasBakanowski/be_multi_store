@@ -114,7 +114,6 @@ async function getAllDisabledProductsController(req: Request, res: Response) {
 }
 async function getTopSellingProductsController(req: Request, res: Response) {
   try {
-    console.log("no se porque no entra pora aca")
     const topSellingProducts = await getTopSellingProductsService();
     res.status(200).json(topSellingProducts);
   } catch (error) {
