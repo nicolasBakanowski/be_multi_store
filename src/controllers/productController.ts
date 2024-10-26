@@ -5,7 +5,8 @@ import {
   getProductByIdService,
   getProductByCategoryService,
   toggleProductStatusService,
-  getAllDisabledProductsService
+  getAllDisabledProductsService,
+  getTopSellingProductsService
 } from "../services/productService";
 import { editProductService } from "../services/productService";
 import { ProductAttributes,ProductEdit } from "../interfaces/productInterface";
@@ -111,6 +112,16 @@ async function getAllDisabledProductsController(req: Request, res: Response) {
     res.status(500).json({ error: "Error fetching products" });
   }
 }
+async function getTopSellingProductsController(req: Request, res: Response) {
+  try {
+    console.log("no se porque no entra pora aca")
+    const topSellingProducts = await getTopSellingProductsService();
+    res.status(200).json(topSellingProducts);
+  } catch (error) {
+    res.status(500).json({ error: "Error fetching top-selling products" });
+  }
+}
+
 export {
   createProductController,
   getAllProductsController,
@@ -118,5 +129,6 @@ export {
   getProductByCategoryController,
   editProductController,
   toggleProductStatusController,
-  getAllDisabledProductsController
+  getAllDisabledProductsController,
+  getTopSellingProductsController
 };

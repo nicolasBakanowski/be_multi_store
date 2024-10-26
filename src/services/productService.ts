@@ -6,6 +6,7 @@ import {
   editProductInDB,
   toggleProductStatusInDB,
   getAllDisabledProductsFromDB,
+  getTopSellingProductsFromDB
 } from "../repositories/productRepository";
 import { ProductAttributes,ProductEdit } from "../interfaces/productInterface";
 
@@ -67,7 +68,15 @@ async function getAllDisabledProductsService() {
     throw new Error("Error fetching products");
   }
 }
-
+async function getTopSellingProductsService() {
+  try {
+    console.log("esto es en Service, pero no anda ")
+    const topSellingProducts = await getTopSellingProductsFromDB(); 
+    return topSellingProducts;
+  } catch (error) {
+    throw new Error("Error fetching top-selling products");
+  }
+}
 
 export {
   createProductService,
@@ -76,5 +85,6 @@ export {
   getProductByCategoryService,
   editProductService,
   toggleProductStatusService,
-  getAllDisabledProductsService
+  getAllDisabledProductsService,
+  getTopSellingProductsService
 };

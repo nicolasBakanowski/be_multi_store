@@ -13,8 +13,7 @@ class Product extends Model<ProductAttributes> implements ProductAttributes {
   public imageUrl!: string;
   public categoryId!: number;
   public available!: boolean;
-  public costPrice!: number; // Agregar el campo costPrice
-
+  public costPrice!: number; 
   public category!: Category;
 }
 
@@ -62,9 +61,9 @@ Product.init(
       defaultValue: true,
     },
     costPrice: {
-      type: DataTypes.FLOAT, // Definir costPrice como FLOAT
+      type: DataTypes.FLOAT,
       allowNull: false,
-      defaultValue: 0, // Valor predeterminado de 0
+      defaultValue: 0,
     },
   },
   {

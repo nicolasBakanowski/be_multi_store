@@ -1,5 +1,6 @@
 import Product from "../models/productModel";
 import { ProductAttributes,ProductEdit } from "../interfaces/productInterface";
+import sequelize from "../db";
 
 async function createProductInDB(productData: ProductAttributes) {
   try {
@@ -84,6 +85,33 @@ async function getAllDisabledProductsFromDB() {
   }
 }
 
+async function getTopSellingProductsFromDB() {
+  try {
+    const [results, metadata] = await sequelize.query(`
+      SELECT 
+        p.id,
+        p.name,
+        p.price,
+        SUM(op.quantity) AS totalSold
+      FROM 
+        products p
+      JOIN 
+        OrderProducts op ON p.id = op.productId
+      GROUP BY 
+        p.id, p.name, p.price
+      ORDER BY 
+        totalSold DESC
+      LIMIT 10;
+    `);
+    return results; 
+  } catch (error) {
+    console.error("Error fetching top-selling products:", error);
+    throw new Error("Error fetching top-selling products from the database");
+  }
+}
+
+
+
 export {
   createProductInDB,
   getAllProductsFromDB,
@@ -91,5 +119,6 @@ export {
   getProductsByCategoryFromDB,
   editProductInDB,
   toggleProductStatusInDB,
-  getAllDisabledProductsFromDB
+  getAllDisabledProductsFromDB,
+  getTopSellingProductsFromDB
 };
