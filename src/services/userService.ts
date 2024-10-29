@@ -41,7 +41,7 @@ async function registerUserService(userData: UserAttributes) {
     if (existingUser) {
       throw new Error("User with this email already exists");
     }
-    const hashedPassword = await hashPassword(userData.password);
+    const hashedPassword = await hashPassword(userData.password!);
     const userWithHashedPassword = { ...userData, password: hashedPassword };
     const newUser = await createUserInDB(userWithHashedPassword);
 
@@ -50,5 +50,22 @@ async function registerUserService(userData: UserAttributes) {
     throw new Error("Error registering user");
   }
 }
+async function authGoogleService(userData: UserAttributes) {
+  try {
+    const user = await findUserByEmail(userData.email) || await createUserInDB(userData);
+    
+    const tokenPayload: TokenPayload = {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      roleId: user.roleId,
+    };
+    const token = generateToken(tokenPayload);
+    return { user, token };
+  } catch (error) {
+    throw new Error("Error registering user");
+  }
+}
 
-export { registerUserService, loginUserService };
+
+export { registerUserService, loginUserService, authGoogleService };

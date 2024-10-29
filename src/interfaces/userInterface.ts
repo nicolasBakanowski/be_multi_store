@@ -4,7 +4,7 @@ interface UserAttributes {
   id: number;
   name: string;
   email: string;
-  password: string;
+  password: string | null; 
   googleId?: string | null;
   phone?: string | null;
   roleId?: number | null;
