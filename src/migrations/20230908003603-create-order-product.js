@@ -13,16 +13,20 @@ module.exports = {
         allowNull: false,
         references: {
           model: "Orders",
-          key: "id", // Nombre de la columna de referencia (puede variar si es diferente)
+          key: "id", 
         },
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       },
       productId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: "products",
-          key: "id", // Nombre de la columna de referencia (puede variar si es diferente)
+          model: "Products",  
+          key: "id", 
         },
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       },
       quantity: {
         type: Sequelize.INTEGER,

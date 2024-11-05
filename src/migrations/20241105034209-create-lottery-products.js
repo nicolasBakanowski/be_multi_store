@@ -2,34 +2,32 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable("Lotteries", {
+    await queryInterface.createTable("LotteryProducts", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      productId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-      },
-      requiredEarnings: {
-        type: Sequelize.DECIMAL(10, 2),
-        allowNull: false,
-      },
-      status: {
-        type: Sequelize.STRING,
-        allowNull: false,
-        defaultValue: "active",
-      },
-      winnerId: {
+      lotteryId: {
         type: Sequelize.INTEGER,
         references: {
-          model: "Users", 
+          model: "Lotteries",
           key: "id",
         },
         onUpdate: "CASCADE",
-        onDelete: "SET NULL",
+        onDelete: "CASCADE",
+        allowNull: false,
+      },
+      productId: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: "Products",
+          key: "id",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,
@@ -43,6 +41,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable("Lotteries");
+    await queryInterface.dropTable("LotteryProducts");
   },
 };
