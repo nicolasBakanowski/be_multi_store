@@ -68,7 +68,7 @@ Product.init(
   },
   {
     sequelize,
-    tableName: "products",
+    tableName: "Products",
   }
 );
 
