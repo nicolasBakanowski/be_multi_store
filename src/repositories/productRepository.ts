@@ -109,6 +109,21 @@ async function getTopSellingProductsFromDB() {
   }
 }
 
+async function getProductsCost(productIds: number[]) {
+  try {
+    const products = await Product.findAll({
+      where: {
+        id: productIds,
+      },
+      attributes: ["costPrice"],
+    });
+    const totalCost = products.reduce((acc, product) => acc + (product.costPrice || 0), 0);
+    return totalCost;
+  } catch (error) {
+    throw new Error("Error fetching products cost from the database");
+  }
+}
+
 
 
 export {
@@ -119,5 +134,6 @@ export {
   editProductInDB,
   toggleProductStatusInDB,
   getAllDisabledProductsFromDB,
-  getTopSellingProductsFromDB
+  getTopSellingProductsFromDB,
+  getProductsCost
 };

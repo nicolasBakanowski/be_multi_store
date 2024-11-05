@@ -14,9 +14,9 @@ import productRoute from "./routes/productRoute";
 import userRoute from "./routes/usersRoute";
 import statusRoute from "./routes/statusRoute";
 import earningRoute from "./routes/earningRoute";
-
 import orderSocket from "./sockets/orderSocket";
 import * as dotenv from "dotenv";
+import lotteryRoute from "./routes/lotteryRoute";
 
 const app = express();
 const PORT = process.env.PORT || 30001;
@@ -80,7 +80,7 @@ app.use("/user", userRoute);
 app.use("/order", orderRoute);
 app.use("/status", statusRoute);
 app.use("/earning", earningRoute);
-
+app.use("/lotery", lotteryRoute)
 
 orderSocket(io);
 
