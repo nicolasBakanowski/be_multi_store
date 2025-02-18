@@ -3,21 +3,21 @@
     "username": "myuser",
     "password": "mypassword",
     "database": "mydb",
-    "host": "127.0.0.1",
+    "host": "db",
     "dialect": "mysql"
   },
   "test": {
     "username": "myuser",
     "password": "mypassword",
     "database": "mydb",
-    "host": "127.0.0.1",
+    "host": "db",
     "dialect": "mysql"
   },
   "production": {
     "username": "myuser",
     "password": "mypassword",
     "database": "mydb",
-    "host": "127.0.0.1",
+    "host": "db",
     "dialect": "mysql"
   }
 }

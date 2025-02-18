@@ -1,16 +1,46 @@
+version: '3.8'
+
 services:
   db:
     image: mysql:5.7
-    command: --explicit_defaults_for_timestamp=1 --tls-version=TLSv1.2 --pid-file=/var/run/mysqld/mysqld.pid
-    volumes:
-      - db-data:/var/lib/mysql
-      - /etc/localtime:/etc/localtime:ro
+    container_name: mysql_db
+    command: --bind-address=0.0.0.0
     environment:
-      MYSQL_ROOT_PASSWORD: examplepassword
+      MYSQL_ROOT_PASSWORD: mypassword
       MYSQL_DATABASE: mydb
       MYSQL_USER: myuser
       MYSQL_PASSWORD: mypassword
     ports:
       - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  app:
+    build: .
+    container_name: mi-aplicacion
+    restart: always
+    environment:
+      NODE_ENV: development
+      IPLOCALHOST: http://localhost:3000
+      IPCLIENTHOST: http://192.168.0.46:3000
+      MYSQL_URL: mysql://myuser:mypassword@db:3306/mydb
+      SECRET_KEY: ELBAKENDDELMULTISTORE
+      DB_HOST: db
+      MYSQL_HOST: db
+    ports:
+      - "30001:30001"
+    depends_on:
+      db:
+        condition: service_healthy
+    entrypoint: ["/entrypoint.sh"]
+    volumes:
+      - .:/app
+      - /app/node_modules
+
 volumes:
-  db-data:
+  mysql_data:
