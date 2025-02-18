@@ -17,10 +17,12 @@ import earningRoute from "./routes/earningRoute";
 import orderSocket from "./sockets/orderSocket";
 import * as dotenv from "dotenv";
 import lotteryRoute from "./routes/lotteryRoute";
+import setupSwaggerDocs from "./config/swaggerConfig";
+
 
 const app = express();
 const PORT = process.env.PORT || 30001;
-
+setupSwaggerDocs(app);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 

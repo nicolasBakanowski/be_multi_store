@@ -16,5 +16,14 @@ categoryRoute.post(
   createCategoryController
 );
 categoryRoute.get("/all", getAllCategoriesController);
-
+/**
+ * @swagger
+ * /category/all:
+ *   get:
+ *     summary: Obtiene todas las categorias
+ *     tags: [Category]
+ *     responses:
+ *       200:
+ *         description: Lista de usuarios obtenida con éxito
+ */
 export default categoryRoute;
