@@ -41,9 +41,17 @@ Asegúrate de tener instalados los siguientes requisitos antes de continuar:
    npm run build
    ```
 
-   ```bash
-   npm run start
-   ```
+```bash
+npm run start
+```
+
+## Linting
+
+Ejecuta ESLint para verificar la calidad del código:
+
+```bash
+npm run lint
+```
 
 ## Ejecución con Docker
 

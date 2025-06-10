@@ -88,8 +88,8 @@ orderSocket(io);
 
 if (require.main === module) {
   server.listen(PORT, () => {
-    console.log("dirname", __dirname);
-    console.log(`Servidor escuchando en el puerto ${PORT}`);
+    console.info("dirname", __dirname);
+    console.info(`Servidor escuchando en el puerto ${PORT}`);
   });
 }
 
