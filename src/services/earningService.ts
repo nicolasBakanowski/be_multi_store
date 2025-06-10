@@ -2,7 +2,7 @@ import {
     findDailyEarningByDate,
     createDailyEarningInDB,
     updateDailyEarningInDB,
-  } from "../repositories/earningRepostory";
+  } from "../repositories/earningRepository";
   import { findConfirmedOrdersByDate } from "../repositories/orderRepository";
   import { OrderAttributes } from "../interfaces/orderInterface";  
 

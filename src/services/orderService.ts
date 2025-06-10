@@ -9,7 +9,7 @@ async function createOrderService(orderData: OrderAttributes) {
     const newOrder = await createOrderInDB(orderData);
     return newOrder;
   } catch (error) {
-    console.log("aver si salta la bronca", error);
+    console.error("Error creating order:", error);
     throw new Error("Error creating Order createOrderService");
   }
 }

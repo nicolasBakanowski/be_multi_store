@@ -5,7 +5,7 @@ async function getAllStatusFromDB() {
     const status = await Status.findAll({});
     return status;
   } catch (error) {
-    console.log(error, "este seria el error");
+    console.error(error, "este seria el error");
     throw new Error("Error fetching status from the database");
   }
 }

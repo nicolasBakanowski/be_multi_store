@@ -6,6 +6,8 @@ const earningRoute = express.Router();
 
 earningRoute.post(
   "/earningGenerate",
+  authMiddleware,
+  isAdminMiddleware,
   createOrUpdateDailyEarningController,
 );
 

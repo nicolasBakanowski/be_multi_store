@@ -24,14 +24,14 @@ function imageDestination(
   try {
     const itemType = req.baseUrl.split("/")[1];
     const destination = path.resolve("uploads", itemType);
-    console.log("Trying to save in destination:", destination);
+    console.info("Trying to save in destination:", destination);
 
     fs.access(destination, fs.constants.F_OK, (err: any) => {
       if (err) {
         console.error("Error accessing destination:", err);
         cb(err, "");
       } else {
-        console.log("Destination exists, trying to save.");
+        console.info("Destination exists, trying to save.");
         cb(null, destination);
       }
     });

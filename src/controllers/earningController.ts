@@ -4,7 +4,7 @@ import { createOrUpdateDailyEarningService } from "../services/earningService";
 async function createOrUpdateDailyEarningController(req: Request, res: Response) {
   try {
     const { date } = req.body;
-    console.log(date)
+    console.info(date);
     const updatedEarning = await createOrUpdateDailyEarningService(date);
 
     res.status(201).json(updatedEarning);

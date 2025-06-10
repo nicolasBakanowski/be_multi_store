@@ -34,7 +34,7 @@ async function createOrderController(req: Request, res: Response) {
       newOrder,
       productsInOrder: allProductsInOrder,
     };
-    console.log("variable orderWithProducts:", orderWithProducts);
+    console.info("variable orderWithProducts:", orderWithProducts);
     io.emit("newOrder", orderWithProducts);
     return res.status(200).json({ status: "OK" });
   } catch (error) {
