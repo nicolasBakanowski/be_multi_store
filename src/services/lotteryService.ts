@@ -1,5 +1,5 @@
 
-import { createLottery } from "../repositories/lotteryRepository";
+import { createLottery, getCurrentLottery } from "../repositories/lotteryRepository";
 import { createLotteryProducts } from "../repositories/lotteryProductsRepository";
 import { getProductsCost } from "../repositories/productRepository"; 
 
