@@ -1,4 +1,4 @@
-import { createLottery } from "../repositories/lotteryRepostory";
+import { createLottery, getCurrentLottery } from "../repositories/lotteryRepostory";
 import { createLotteryProducts } from "../repositories/lotteryProductsRepository";
 import { getProductsCost } from "../repositories/productRepository"; 
 
@@ -13,4 +13,9 @@ export const startNewLotteryService = async (productIds: number[]) => {
   await createLotteryProducts(lotteryId, productIds);
 
   return lotteryId;
+};
+
+export const getCurrentLotteryService = async () => {
+  const lottery = await getCurrentLottery();
+  return lottery;
 };
