@@ -5,6 +5,8 @@ import {
   getProductsByCategoryFromDB,
   editProductInDB,
   toggleProductStatusInDB,
+  getAllDisabledProductsFromDB,
+  getTopSellingProductsFromDB
 } from "../repositories/productRepository";
 import { ProductAttributes,ProductEdit } from "../interfaces/productInterface";
 
@@ -58,7 +60,22 @@ async function toggleProductStatusService(productId: number, active: boolean) {
     throw new Error(`Error trying to toggle product status: Service`);
   }
 }
-
+async function getAllDisabledProductsService() {
+  try {
+    const products = await getAllDisabledProductsFromDB();
+    return products;
+  } catch (error) {
+    throw new Error("Error fetching products");
+  }
+}
+async function getTopSellingProductsService() {
+  try {
+    const topSellingProducts = await getTopSellingProductsFromDB(); 
+    return topSellingProducts;
+  } catch (error) {
+    throw new Error("Error fetching top-selling products");
+  }
+}
 
 export {
   createProductService,
@@ -66,5 +83,7 @@ export {
   getProductByIdService,
   getProductByCategoryService,
   editProductService,
-  toggleProductStatusService
+  toggleProductStatusService,
+  getAllDisabledProductsService,
+  getTopSellingProductsService
 };

@@ -13,12 +13,16 @@ import orderRoute from "./routes/orderRoute";
 import productRoute from "./routes/productRoute";
 import userRoute from "./routes/usersRoute";
 import statusRoute from "./routes/statusRoute";
+import earningRoute from "./routes/earningRoute";
 import orderSocket from "./sockets/orderSocket";
 import * as dotenv from "dotenv";
+import lotteryRoute from "./routes/lotteryRoute";
+import setupSwaggerDocs from "./config/swaggerConfig";
+
 
 const app = express();
 const PORT = process.env.PORT || 30001;
-
+setupSwaggerDocs(app);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -77,12 +81,16 @@ app.use("/product", productRoute);
 app.use("/user", userRoute);
 app.use("/order", orderRoute);
 app.use("/status", statusRoute);
+app.use("/earning", earningRoute);
+app.use("/lotery", lotteryRoute)
 
 orderSocket(io);
 
-server.listen(PORT, () => {
-  console.log("dirname", __dirname);
-  console.log(`Servidor escuchando en el puerto ${PORT}`);
-});
+if (require.main === module) {
+  server.listen(PORT, () => {
+    console.info("dirname", __dirname);
+    console.info(`Servidor escuchando en el puerto ${PORT}`);
+  });
+}
 
-export { io };
+export { io, app, server };

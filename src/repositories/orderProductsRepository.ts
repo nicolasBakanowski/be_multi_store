@@ -17,7 +17,7 @@ async function getAllProductsByOrderfromBd(orderId: number) {
       include: [
         {
           model: Product,
-          attributes: ["id", "name", "description", "stock", "price"],
+          attributes: ["id", "name", "description", "stock", "price","costPrice"],
         },
         {
           model: Order,

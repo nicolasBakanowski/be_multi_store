@@ -5,13 +5,14 @@ import {
   getProductByIdController,
   getProductByCategoryController,
   editProductController,
-  toggleProductStatusController
+  toggleProductStatusController,
+  getAllDisabledProductsController,
+  getTopSellingProductsController
 } from "../controllers/productController";
 import { upload } from "../helpers/imageUtils";
 import { isAdminMiddleware } from "../middleware/isAdminMiddleware";
 import { authMiddleware } from "../middleware/authMiddleware";
 const productRoute = express.Router();
-
 productRoute.post(
   "/new",
   authMiddleware,
@@ -26,9 +27,12 @@ productRoute.put(
   upload.single("productImage"),
   editProductController
 );
+productRoute.get("/topSelling",getTopSellingProductsController);
 productRoute.get("/all", getAllProductsController);
+productRoute.get("/disabled",getAllDisabledProductsController)
 productRoute.get("/:id", getProductByIdController);
 productRoute.get("/category/:categoryId", getProductByCategoryController);
 productRoute.patch("/status/:id",authMiddleware,
 isAdminMiddleware,toggleProductStatusController)
+
 export default productRoute;

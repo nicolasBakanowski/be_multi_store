@@ -2,14 +2,14 @@ import { OrderAttributes } from "../interfaces/orderInterface";
 import {
   createOrderInDB,
   changeOrderStatutInDB,
-} from "../repositories/orderRepostity";
+} from "../repositories/orderRepository";
 
 async function createOrderService(orderData: OrderAttributes) {
   try {
     const newOrder = await createOrderInDB(orderData);
     return newOrder;
   } catch (error) {
-    console.log("aver si salta la bronca", error);
+    console.error("Error creating order:", error);
     throw new Error("Error creating Order createOrderService");
   }
 }

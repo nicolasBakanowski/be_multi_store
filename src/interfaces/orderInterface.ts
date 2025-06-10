@@ -12,14 +12,19 @@ interface SimplifiedCartItem {
 }
 
 interface OrderAttributes {
-  id: number;
+  id?: number;
   name: string | null;
   phone: string | null;
   address: string | null;
   extraCommentary: string;
   delivery: boolean;
+  totalAmount: number; 
+  totalCostPriceAmount: number;
   statusId: number;
+  createdAt?: Date;  
+  updatedAt?: Date; 
 }
+
 interface OrderData {
   userInfo: UserInfo;
   extraCommentary: string;

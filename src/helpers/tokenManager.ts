@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { removeBearerPrefix } from "./removeBeaber";
+import { removeBearerPrefix } from "./removeBearer";
 import { TokenPayload } from "../interfaces/tokenPayload";
 import dotenv from "dotenv";
 
