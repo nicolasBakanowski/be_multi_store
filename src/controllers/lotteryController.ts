@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { startNewLotteryService } from "../services/lotteryService";
+import { startNewLotteryService, getCurrentLotteryService } from "../services/lotteryService";
 
 export const startNewLotteryController = async (req: Request, res: Response) => {
   try {
@@ -13,5 +13,18 @@ export const startNewLotteryController = async (req: Request, res: Response) => 
   } catch (error) {
     console.error("Error al iniciar la lotería:", error);
     return res.status(500).json({ message: "Error al iniciar la lotería" });
+  }
+};
+
+export const getCurrentLotteryController = async (req: Request, res: Response) => {
+  try {
+    const lottery = await getCurrentLotteryService();
+    if (!lottery) {
+      return res.status(404).json({ message: "No hay una lotería activa" });
+    }
+    return res.status(200).json(lottery);
+  } catch (error) {
+    console.error("Error al obtener la lotería actual:", error);
+    return res.status(500).json({ message: "Error al obtener la lotería actual" });
   }
 };
