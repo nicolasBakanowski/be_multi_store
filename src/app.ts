@@ -86,9 +86,11 @@ app.use("/lotery", lotteryRoute)
 
 orderSocket(io);
 
-server.listen(PORT, () => {
-  console.log("dirname", __dirname);
-  console.log(`Servidor escuchando en el puerto ${PORT}`);
-});
+if (require.main === module) {
+  server.listen(PORT, () => {
+    console.log("dirname", __dirname);
+    console.log(`Servidor escuchando en el puerto ${PORT}`);
+  });
+}
 
-export { io };
+export { io, app, server };
