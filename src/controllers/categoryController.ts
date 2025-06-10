@@ -18,7 +18,7 @@ async function createCategoryController(req: Request, res: Response) {
         req.file.originalname
       }`;
     }
-    console.log("este es la imageUrl", imageUrl);
+    console.info("este es la imageUrl", imageUrl);
     let newCategory;
     if (imageUrl) {
       newCategory = await createCategoryService(name, imageUrl);
