@@ -5,6 +5,11 @@ until node -e "require('mysql2').createConnection({host: 'db', user: 'myuser', p
   sleep 2
 done
 
+if [ ! -d node_modules ] || [ -z "$(ls -A node_modules)" ]; then
+  echo "Instalando dependencias..."
+  npm install
+fi
+
 echo "MySQL está listo. Compilando TypeScript..."
 npm run build
 
