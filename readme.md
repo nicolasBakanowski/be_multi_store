@@ -17,7 +17,7 @@ Asegúrate de tener instalados los siguientes requisitos antes de continuar:
    git clone git@github.com:nicolasBakanowski/be_multi_store.git
    ```
 
-2. el servicio de la base de datos esta en el docker-compose, necesitamos levantarlo, en la raiz del proyecto podemos usar el siguiente comando
+2. El servicio de la base de datos está en el `docker-compose.yml`. Para levantarlo puedes ejecutar el siguiente comando:
 
    ```bash
    docker-compose up
@@ -35,7 +35,7 @@ Asegúrate de tener instalados los siguientes requisitos antes de continuar:
    npx sequelize-cli db:seed:all
    ```
 
-5. con esto ya podemos correr el proyecto
+5. Con esto ya podemos correr el proyecto
 
    ```bash
    npm run build
@@ -44,3 +44,13 @@ Asegúrate de tener instalados los siguientes requisitos antes de continuar:
    ```bash
    npm run start
    ```
+
+## Ejecución con Docker
+
+Si prefieres utilizar contenedores para todo el entorno ejecuta:
+
+```bash
+docker-compose up --build
+```
+
+El `entrypoint.sh` instalará las dependencias si es necesario, compilará el código y aplicará las migraciones y seeds automáticamente antes de iniciar la aplicación.
