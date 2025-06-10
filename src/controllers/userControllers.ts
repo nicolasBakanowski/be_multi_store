@@ -4,9 +4,10 @@ import { UserAttributes } from "../interfaces/userInterface";
 async function loginController(req: Request, res: Response) {
   try {
     const { email, password } = req.body;
-    const token = await loginUserService(email, password);
-    if (token) {
-      res.status(200).json({ token });
+    const loginResult = await loginUserService(email, password);
+    if (loginResult) {
+      const { token, user } = loginResult;
+      res.status(200).json({ token, user });
     } else {
       res.status(401).json({ error: "Invalid credentials" });
     }
