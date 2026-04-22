@@ -1,11 +1,12 @@
 import { Request, Response, NextFunction } from "express";
+import { isAdminRole } from "../constants/roles";
 
 export const isAdminMiddleware = (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  if (req.body.user.roleId === 1) {
+  if (isAdminRole(req.user?.roleId ?? null)) {
     next();
   } else {
     res

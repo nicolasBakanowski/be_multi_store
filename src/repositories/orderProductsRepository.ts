@@ -44,9 +44,11 @@ async function getAllProductsByOrderfromBd(orderId: number) {
   }
 }
 
-async function getAllOrderFormDB() {
+async function getAllOrderFormDB(limit = 100, offset = 0) {
   try {
     const orders = await OrderProduct.findAll({
+      limit,
+      offset,
       include: [
         {
           model: Product,

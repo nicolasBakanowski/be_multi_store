@@ -16,7 +16,6 @@ export const authMiddleware = (
     return res.status(401).json({ error: "Invalid token" });
   }
 
-  // Pasamos los datos del usuario al objeto req.user
-  req.body.user = decoded;
+  req.user = decoded;
   next();
 };

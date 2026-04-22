@@ -7,11 +7,13 @@ import {
   getAllOrdersProductService,
 } from "../services/orderProductService";
 import { changeOrderStatusService } from "../services/orderService";
-import { io } from "../app";
+import { getIo } from "../socket/ioSingleton";
+import { enqueueOrderCreated } from "../queue/orderQueue";
 
 async function createOrderController(req: Request, res: Response) {
   try {
-    const { deliveryMethod, userInfo, simplifiedCartItems,totalAmount,totalCostPrice } = req.body;
+    const { userInfo, simplifiedCartItems, totalAmount, totalCostPrice } =
+      req.body;
     const orderData: OrderAttributes = {
       name: userInfo.name,
       phone: userInfo.phone,
@@ -23,10 +25,7 @@ async function createOrderController(req: Request, res: Response) {
       statusId: 1,
     };
     const newOrder = await createOrderService(orderData);
-    const createproductsInOrder = await createOrderProductService(
-      newOrder.id,
-      simplifiedCartItems
-    );
+    await createOrderProductService(newOrder.id, simplifiedCartItems);
     const allProductsInOrder = await getAllOrderProductsByIdService(
       newOrder.id
     );
@@ -34,8 +33,17 @@ async function createOrderController(req: Request, res: Response) {
       newOrder,
       productsInOrder: allProductsInOrder,
     };
-    console.info("variable orderWithProducts:", orderWithProducts);
-    io.emit("newOrder", orderWithProducts);
+    const io = getIo();
+    const adminsRoom = io.sockets.adapter.rooms.get("admins");
+    if (adminsRoom && adminsRoom.size > 0) {
+      io.to("admins").emit("newOrder", orderWithProducts);
+    } else {
+      io.emit("newOrder", orderWithProducts);
+    }
+    await enqueueOrderCreated({
+      orderId: newOrder.id,
+      totalAmount: newOrder.totalAmount,
+    });
     return res.status(200).json({ status: "OK" });
   } catch (error) {
     console.error("Error:", error);
@@ -46,7 +54,15 @@ async function createOrderController(req: Request, res: Response) {
 }
 async function getAllOrdersController(req: Request, res: Response) {
   try {
-    const orders = await getAllOrdersProductService();
+    const limit = Math.min(
+      500,
+      Math.max(1, parseInt(String(req.query.limit ?? "100"), 10) || 100)
+    );
+    const offset = Math.max(
+      0,
+      parseInt(String(req.query.offset ?? "0"), 10) || 0
+    );
+    const orders = await getAllOrdersProductService(limit, offset);
     return res.status(200).json(orders);
   } catch (error) {
     console.error("Error:", error);
@@ -61,6 +77,7 @@ async function changeOrderStatusController(req: Request, res: Response) {
     const { statusId } = req.body;
     const orderId = parseInt(req.params.id, 10);
     const status = await changeOrderStatusService(orderId, statusId);
+    const io = getIo();
     io.emit("orderStatusChanged", status);
     res.status(200).json(status);
   } catch (error) {

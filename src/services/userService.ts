@@ -4,6 +4,7 @@ import { UserAttributes } from "../interfaces/userInterface";
 import {
   createUserInDB,
   findUserByEmail,
+  findUserByGoogleId,
 } from "../repositories/userRepository";
 import { TokenPayload } from "../interfaces/tokenPayload";
 import User from "../models/userModel";
@@ -50,10 +51,28 @@ async function registerUserService(userData: UserAttributes) {
     throw new Error("Error registering user");
   }
 }
-async function authGoogleService(userData: UserAttributes) {
+async function authGoogleService(params: {
+  email: string;
+  name: string;
+  googleId: string;
+}) {
   try {
-    const user = await findUserByEmail(userData.email) || await createUserInDB(userData);
-    
+    let user =
+      (await findUserByGoogleId(params.googleId)) ||
+      (await findUserByEmail(params.email));
+
+    if (!user) {
+      const userData: UserAttributes = {
+        id: 0,
+        name: params.name,
+        email: params.email,
+        password: null,
+        googleId: params.googleId,
+        roleId: 2,
+      };
+      user = await createUserInDB(userData);
+    }
+
     const tokenPayload: TokenPayload = {
       id: user.id,
       name: user.name,
@@ -62,7 +81,7 @@ async function authGoogleService(userData: UserAttributes) {
     };
     const token = generateToken(tokenPayload);
     return { user, token };
-  } catch (error) {
+  } catch {
     throw new Error("Error registering user");
   }
 }

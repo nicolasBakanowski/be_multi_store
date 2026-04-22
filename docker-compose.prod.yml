@@ -1,0 +1,75 @@
+# Producción: imagen multi-stage, sin montar código fuente (definir MYSQL_* y SECRET_KEY en .env.production)
+name: multistore-backend-prod
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: multistore_mysql_prod
+    command: --default-authentication-plugin=mysql_native_password --bind-address=0.0.0.0
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -uroot -p$$MYSQL_ROOT_PASSWORD || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+    volumes:
+      - mysql_prod_data:/var/lib/mysql
+
+  redis:
+    image: redis:7-alpine
+    container_name: multistore_redis_prod
+    restart: always
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    image: ${API_IMAGE_NAME:-multistore-api}:${API_IMAGE_TAG:-prod}
+    container_name: multistore_api_prod
+    restart: always
+    env_file:
+      - .env.production
+    environment:
+      NODE_ENV: production
+      PORT: ${PORT:-30001}
+      DB_HOST: db
+      MYSQL_HOST: db
+    ports:
+      - "${PORT:-30001}:30001"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "require('http').get('http://127.0.0.1:'+(process.env.PORT||30001)+'/test',r=>process.exit(r.statusCode===200?0:1)).on('error',()=>process.exit(1))",
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 45s
+
+  worker:
+    image: ${API_IMAGE_NAME:-multistore-api}:${API_IMAGE_TAG:-prod}
+    container_name: multistore_worker_prod
+    restart: always
+    env_file:
+      - .env.production
+    environment:
+      NODE_ENV: production
+      REDIS_URL: ${REDIS_URL:-redis://redis:6379}
+    depends_on:
+      - redis
+    entrypoint: ["node", "dist/worker.js"]
+
+volumes:
+  mysql_prod_data:

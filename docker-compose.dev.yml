@@ -1,0 +1,78 @@
+# Desarrollo: API con hot-reload (volumen) + MySQL 8
+# Uso desde be_multi_store: docker compose -f docker-compose.dev.yml --env-file .env.development up -d
+# O desde la raíz del repo: make up
+name: multistore-backend-dev
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: multistore_mysql_dev
+    command: --default-authentication-plugin=mysql_native_password --bind-address=0.0.0.0
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-devroot}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-multistore}
+      MYSQL_USER: ${MYSQL_USER:-multistore}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-multistore}
+    ports:
+      - "${MYSQL_PORT:-3306}:3306"
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -uroot -p$$MYSQL_ROOT_PASSWORD || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    volumes:
+      - mysql_dev_data:/var/lib/mysql
+
+  redis:
+    image: redis:7-alpine
+    container_name: multistore_redis_dev
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: multistore_api_dev
+    restart: unless-stopped
+    env_file:
+      - .env.development
+    environment:
+      NODE_ENV: development
+      PORT: ${PORT:-30001}
+      DB_HOST: db
+      MYSQL_HOST: db
+    ports:
+      - "${PORT:-30001}:30001"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    entrypoint: ["/entrypoint.sh"]
+    volumes:
+      - .:/app
+      - api_node_modules:/app/node_modules
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: multistore_worker_dev
+    restart: unless-stopped
+    env_file:
+      - .env.development
+    environment:
+      NODE_ENV: development
+      REDIS_URL: ${REDIS_URL:-redis://redis:6379}
+    depends_on:
+      - redis
+    entrypoint: ["/bin/sh", "-c"]
+    command: "npm run build && node dist/worker.js"
+    volumes:
+      - .:/app
+      - api_node_modules:/app/node_modules
+
+volumes:
+  mysql_dev_data:
+  api_node_modules:

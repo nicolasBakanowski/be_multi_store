@@ -1,7 +1,7 @@
 import multer from "multer";
 import path from "path";
+import fs from "fs";
 import { Request } from "express";
-const fs = require("fs");
 
 function imageProcessFunction(
   req: Request,

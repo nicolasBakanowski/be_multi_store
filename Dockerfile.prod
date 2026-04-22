@@ -1,0 +1,31 @@
+# Imagen de producción: build TypeScript y arranque con node (sin nodemon)
+FROM node:20-bookworm-slim AS builder
+
+WORKDIR /app
+COPY package*.json tsconfig.json ./
+RUN npm ci
+
+COPY . .
+RUN npm run build
+
+FROM node:20-bookworm-slim
+
+WORKDIR /app
+ENV NODE_ENV=production
+
+COPY package*.json ./
+RUN npm ci --omit=dev && npm cache clean --force
+
+COPY --from=builder /app/dist ./dist
+COPY entrypoint.prod.sh /entrypoint.prod.sh
+RUN chmod +x /entrypoint.prod.sh
+
+# Usuario no root (uid/gid 1001)
+RUN groupadd -r appuser -g 1001 && useradd -r -u 1001 -g appuser appuser \
+  && mkdir -p /app/dist/uploads/product /app/dist/uploads/category \
+  && chown -R appuser:appuser /app
+
+USER appuser
+
+EXPOSE 30001
+ENTRYPOINT ["/entrypoint.prod.sh"]

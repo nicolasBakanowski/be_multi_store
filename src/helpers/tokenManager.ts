@@ -1,28 +1,27 @@
 import jwt from "jsonwebtoken";
 import { removeBearerPrefix } from "./removeBearer";
 import { TokenPayload } from "../interfaces/tokenPayload";
-import dotenv from "dotenv";
 
-dotenv.config()
-
-if (!process.env.SECRET_KEY) {
-  throw new Error("La variable de entorno SECRET_KEY no está definida.");
+function secretKey(): string {
+  const k = process.env.SECRET_KEY;
+  if (!k) {
+    throw new Error("La variable de entorno SECRET_KEY no está definida.");
+  }
+  return k;
 }
-const secretKey = process.env.SECRET_KEY; 
 
 export const generateToken = (payload: TokenPayload): string => {
-  const token = jwt.sign(payload, secretKey, { expiresIn: "1h" });
-  return token;
+  return jwt.sign(payload, secretKey(), { expiresIn: "1h" });
 };
 
 export const verifyToken = (token: string): TokenPayload | null => {
   try {
     const decoded = jwt.verify(
       removeBearerPrefix(token),
-      secretKey
+      secretKey()
     ) as TokenPayload;
     return decoded;
-  } catch (error) {
+  } catch {
     return null;
   }
 };

@@ -29,4 +29,12 @@ async function findUserByEmail(email: string) {
   }
 }
 
-export { createUserInDB, getUserByIdFromDB, findUserByEmail };
+async function findUserByGoogleId(googleId: string) {
+  try {
+    return await User.findOne({ where: { googleId } });
+  } catch {
+    throw new Error("Error fetching user by googleId");
+  }
+}
+
+export { createUserInDB, getUserByIdFromDB, findUserByEmail, findUserByGoogleId };

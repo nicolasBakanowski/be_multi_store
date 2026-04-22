@@ -4,10 +4,22 @@ import {
   getAllOrdersController,
   changeOrderStatusController,
 } from "../controllers/orderController";
+import { authMiddleware } from "../middleware/authMiddleware";
+import { isAdminMiddleware } from "../middleware/isAdminMiddleware";
 
 const orderRoute = express.Router();
-orderRoute.get("/", getAllOrdersController);
+orderRoute.get(
+  "/",
+  authMiddleware,
+  isAdminMiddleware,
+  getAllOrdersController
+);
 orderRoute.post("/new", createOrderController);
-orderRoute.put("/:id", changeOrderStatusController);
+orderRoute.put(
+  "/:id",
+  authMiddleware,
+  isAdminMiddleware,
+  changeOrderStatusController
+);
 
 export default orderRoute;

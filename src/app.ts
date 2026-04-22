@@ -1,3 +1,8 @@
+import dotenv from "dotenv";
+
+dotenv.config();
+
+import { validateEnv } from "./config/env";
 import express from "express";
 import { createServer } from "http";
 import { Server } from "socket.io";
@@ -6,8 +11,10 @@ import cors from "cors";
 import compression from "compression";
 import path from "path";
 import helmetCsp from "helmet-csp";
-import rateLimit from "express-rate-limit";
 import bodyParser from "body-parser";
+import pino from "pino";
+import pinoHttp from "pino-http";
+import { randomUUID } from "crypto";
 import categoryRoute from "./routes/categoryRoute";
 import orderRoute from "./routes/orderRoute";
 import productRoute from "./routes/productRoute";
@@ -15,14 +22,47 @@ import userRoute from "./routes/usersRoute";
 import statusRoute from "./routes/statusRoute";
 import earningRoute from "./routes/earningRoute";
 import orderSocket from "./sockets/orderSocket";
-import * as dotenv from "dotenv";
 import lotteryRoute from "./routes/lotteryRoute";
 import setupSwaggerDocs from "./config/swaggerConfig";
+import { getCorsOrigins } from "./corsConfig";
+import { setIo } from "./socket/ioSingleton";
+import { globalApiLimiter } from "./config/rateLimit";
+import { errorHandler } from "./middleware/errorHandler";
 
+validateEnv();
 
 const app = express();
+const logger = pino({
+  level:
+    process.env.NODE_ENV === "test"
+      ? "silent"
+      : process.env.LOG_LEVEL || "info",
+});
+
 const PORT = process.env.PORT || 30001;
+const corsOrigins = getCorsOrigins();
+const corsOptions: cors.CorsOptions = {
+  origin: corsOrigins,
+  credentials: true,
+};
+
 setupSwaggerDocs(app);
+
+app.use((req, res, next) => {
+  const id = randomUUID();
+  (req as express.Request & { id?: string }).id = id;
+  res.setHeader("x-request-id", id);
+  next();
+});
+
+app.use(
+  pinoHttp({
+    logger,
+    genReqId: (req) =>
+      (req as express.Request & { id?: string }).id || randomUUID(),
+  })
+);
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -32,33 +72,40 @@ app.use((req, res, next) => {
 });
 
 app.use(helmet());
-
-// Configuración específica de CORS
-app.use(
-  cors()
-);
-
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(compression());
 app.use(helmetCsp());
 
 const server = createServer(app);
-dotenv.config();
 
 const io = new Server(server, {
   cors: {
-    //origin: [process.env.IPLOCALHOST || "", process.env.IPCLIENTHOST || ``],
+    origin: corsOrigins,
     credentials: true,
   },
 });
 
-// Config express-rate-limit
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 min
-  max: 100, // request limit per IP
-});
+setIo(io);
+orderSocket(io);
 
-app.use(limiter);
+app.use(globalApiLimiter);
+
+function mountApiRoutes(r: express.Router) {
+  r.use("/category", categoryRoute);
+  r.use("/product", productRoute);
+  r.use("/user", userRoute);
+  r.use("/order", orderRoute);
+  r.use("/status", statusRoute);
+  r.use("/earning", earningRoute);
+  r.use("/lotery", lotteryRoute);
+  r.use("/lottery", lotteryRoute);
+}
+
+mountApiRoutes(app);
+const v1 = express.Router();
+mountApiRoutes(v1);
+app.use("/api/v1", v1);
 
 app.use(
   "/dist/uploads/product/",
@@ -69,27 +116,17 @@ app.use(
   express.static(path.join(__dirname, "uploads", "category"))
 );
 
-app.get("/test", (req, res) => {
+app.get("/test", (_req, res) => {
   res.status(200).json({ message: "¡La prueba fue exitosa!" });
 });
 
-// Manejar OPTIONS pre-flight
-app.options("*", cors());
+app.options("*", cors(corsOptions));
 
-app.use("/category", categoryRoute);
-app.use("/product", productRoute);
-app.use("/user", userRoute);
-app.use("/order", orderRoute);
-app.use("/status", statusRoute);
-app.use("/earning", earningRoute);
-app.use("/lotery", lotteryRoute)
-
-orderSocket(io);
+app.use(errorHandler);
 
 if (require.main === module) {
   server.listen(PORT, () => {
-    console.info("dirname", __dirname);
-    console.info(`Servidor escuchando en el puerto ${PORT}`);
+    logger.info({ dirname: __dirname, port: PORT }, "Servidor escuchando");
   });
 }
 

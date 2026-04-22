@@ -33,11 +33,11 @@ async function getAllOrderProductsByIdService(orderId: number) {
   );
   return productsFormatted;
 }
-async function getAllOrdersProductService() {
+async function getAllOrdersProductService(limit = 100, offset = 0) {
   try {
-    const orders = await getAllOrderFormDB();
+    const orders = await getAllOrderFormDB(limit, offset);
     return orders;
-  } catch (error) {
+  } catch {
     throw new Error("Error get Order");
   }
 }
