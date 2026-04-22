@@ -1,6 +1,9 @@
 import {
   createCategoryInDB,
   getAllCategoriesFromDB,
+  updateCategoryInDB,
+  getCategoryByIdFromDB,
+  deleteCategoryInDB,
 } from "../repositories/categoryRepository";
 
 async function createCategoryService(name: string, imageUrl: string) {
@@ -21,4 +24,37 @@ async function getAllCategoriesService() {
   }
 }
 
-export { createCategoryService, getAllCategoriesService };
+async function updateCategoryService(
+  categoryId: number,
+  updatedCategoryData: Partial<{ name: string; imageUrl: string }>
+) {
+  try {
+    return await updateCategoryInDB(categoryId, updatedCategoryData);
+  } catch {
+    throw new Error("Error editing category");
+  }
+}
+
+async function getCategoryByIdService(categoryId: number) {
+  try {
+    return await getCategoryByIdFromDB(categoryId);
+  } catch {
+    throw new Error("Error fetching category by ID");
+  }
+}
+
+async function deleteCategoryService(categoryId: number) {
+  try {
+    return await deleteCategoryInDB(categoryId);
+  } catch {
+    throw new Error("Error deleting category");
+  }
+}
+
+export {
+  createCategoryService,
+  getAllCategoriesService,
+  updateCategoryService,
+  getCategoryByIdService,
+  deleteCategoryService,
+};

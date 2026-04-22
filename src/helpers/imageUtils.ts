@@ -3,47 +3,36 @@ import path from "path";
 import fs from "fs";
 import { Request } from "express";
 
-function imageProcessFunction(
-  req: Request,
-  file: Express.Multer.File,
-  cb: (error: Error | null, filename: string) => void
-) {
+function uploadRootDir(): string {
+  // Keep runtime path aligned with app.ts (which serves `${__dirname}/uploads/...`)
+  // In compiled output, `__dirname` points to `dist/helpers`, so `../uploads` => `dist/uploads`.
+  return path.resolve(__dirname, "..", "uploads");
+}
+
+// Ensure base folders exist (useful in dev/local runs)
+for (const folder of ["product", "category", "brand"]) {
+  const dir = path.resolve(uploadRootDir(), folder);
   try {
-    cb(null, file.originalname);
-  } catch (error) {
-    console.error("Error in imageProcessFunction:", error);
-    cb(null, "");
+    fs.mkdirSync(dir, { recursive: true });
+  } catch {
+    // best-effort; request-time save will also mkdir per-entity
   }
 }
 
-function imageDestination(
-  req: Request,
-  _file: Express.Multer.File,
-  cb: (error: Error | null, destination: string) => void
-) {
-  try {
-    const itemType = req.baseUrl.split("/")[1];
-    const destination = path.resolve("uploads", itemType);
-    console.info("Trying to save in destination:", destination);
-
-    fs.access(destination, fs.constants.F_OK, (err: any) => {
-      if (err) {
-        console.error("Error accessing destination:", err);
-        cb(err, "");
-      } else {
-        console.info("Destination exists, trying to save.");
-        cb(null, destination);
-      }
-    });
-  } catch (error) {
-    console.error("Error in imageDestination:", error);
-    cb(null, "");
-  }
-}
-
-export const imageStorage = multer.diskStorage({
-  destination: imageDestination,
-  filename: imageProcessFunction,
+export const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: {
+    fileSize: 10 * 1024 * 1024, // 10MB
+  },
+  fileFilter: (_req: Request, file, cb) => {
+    const ok =
+      file.mimetype === "image/jpeg" ||
+      file.mimetype === "image/png" ||
+      file.mimetype === "image/webp";
+    if (!ok) {
+      cb(new Error("Invalid image type"));
+      return;
+    }
+    cb(null, true);
+  },
 });
-
-export const upload = multer({ storage: imageStorage });

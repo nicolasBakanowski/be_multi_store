@@ -3,10 +3,12 @@ import {
   getAllProductsFromDB,
   getProductByIdFromDB,
   getProductsByCategoryFromDB,
+  searchProductsFromDB,
   editProductInDB,
   toggleProductStatusInDB,
   getAllDisabledProductsFromDB,
-  getTopSellingProductsFromDB
+  getTopSellingProductsFromDB,
+  deleteProductInDB
 } from "../repositories/productRepository";
 import { ProductAttributes,ProductEdit } from "../interfaces/productInterface";
 
@@ -44,6 +46,28 @@ async function getProductByCategoryService(categoryId: number) {
     throw new Error("Error fetching product by Category");
   }
 }
+
+async function searchProductsService(params: {
+  q?: string;
+  categoryId?: number;
+  brandId?: number;
+  limit?: number;
+  offset?: number;
+}) {
+  try {
+    const limit = Math.min(Math.max(params.limit ?? 24, 1), 100);
+    const offset = Math.max(params.offset ?? 0, 0);
+    return await searchProductsFromDB({
+      q: params.q,
+      categoryId: params.categoryId,
+      brandId: params.brandId,
+      limit,
+      offset,
+    });
+  } catch {
+    throw new Error("Error searching products");
+  }
+}
 async function editProductService(productId: number, updatedProductData: ProductEdit) {
   try {
     const updatedProduct = await editProductInDB(productId, updatedProductData);
@@ -77,13 +101,23 @@ async function getTopSellingProductsService() {
   }
 }
 
+async function deleteProductService(productId: number) {
+  try {
+    return await deleteProductInDB(productId);
+  } catch {
+    throw new Error("Error deleting product");
+  }
+}
+
 export {
   createProductService,
   getAllProductsService,
   getProductByIdService,
   getProductByCategoryService,
+  searchProductsService,
   editProductService,
   toggleProductStatusService,
   getAllDisabledProductsService,
-  getTopSellingProductsService
+  getTopSellingProductsService,
+  deleteProductService
 };

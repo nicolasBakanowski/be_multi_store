@@ -1,6 +1,8 @@
 import express from "express";
 import {
   createCategoryController,
+  deleteCategoryController,
+  editCategoryController,
   getAllCategoriesController,
 } from "../controllers/categoryController";
 import { upload } from "../helpers/imageUtils";
@@ -14,6 +16,19 @@ categoryRoute.post(
   isAdminMiddleware,
   upload.single("categoryImage"),
   createCategoryController
+);
+categoryRoute.put(
+  "/edit/:id",
+  authMiddleware,
+  isAdminMiddleware,
+  upload.single("categoryImage"),
+  editCategoryController
+);
+categoryRoute.delete(
+  "/:id",
+  authMiddleware,
+  isAdminMiddleware,
+  deleteCategoryController
 );
 categoryRoute.get("/all", getAllCategoriesController);
 /**

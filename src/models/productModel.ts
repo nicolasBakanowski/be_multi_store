@@ -1,6 +1,7 @@
 import { DataTypes, Model } from "sequelize";
 import sequelize from "../db";
 import Category from "./categoryModel";
+import Brand from "./brandModel";
 import { ProductAttributes } from "../interfaces/productInterface";
 
 class Product extends Model<ProductAttributes> implements ProductAttributes {
@@ -12,9 +13,11 @@ class Product extends Model<ProductAttributes> implements ProductAttributes {
   public price!: number;
   public imageUrl!: string;
   public categoryId!: number;
+  public brandId!: number;
   public available!: boolean;
   public costPrice!: number; 
   public category!: Category;
+  public brand!: Brand;
 }
 
 Product.init(
@@ -50,6 +53,15 @@ Product.init(
         model: Category,
         key: "id",
       },
+    },
+    brandId: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: Brand,
+        key: "id",
+      },
+      field: "brandId",
     },
     shortDescription: {
       type: DataTypes.STRING,

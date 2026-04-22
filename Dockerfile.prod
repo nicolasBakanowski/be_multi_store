@@ -22,7 +22,7 @@ RUN chmod +x /entrypoint.prod.sh
 
 # Usuario no root (uid/gid 1001)
 RUN groupadd -r appuser -g 1001 && useradd -r -u 1001 -g appuser appuser \
-  && mkdir -p /app/dist/uploads/product /app/dist/uploads/category \
+  && mkdir -p /app/dist/uploads/product /app/dist/uploads/category /app/dist/uploads/brand \
   && chown -R appuser:appuser /app
 
 USER appuser

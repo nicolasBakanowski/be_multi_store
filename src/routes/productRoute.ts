@@ -4,10 +4,12 @@ import {
   getAllProductsController,
   getProductByIdController,
   getProductByCategoryController,
+  searchProductsController,
   editProductController,
   toggleProductStatusController,
   getAllDisabledProductsController,
-  getTopSellingProductsController
+  getTopSellingProductsController,
+  deleteProductController,
 } from "../controllers/productController";
 import { upload } from "../helpers/imageUtils";
 import { isAdminMiddleware } from "../middleware/isAdminMiddleware";
@@ -27,11 +29,18 @@ productRoute.put(
   upload.single("productImage"),
   editProductController
 );
+productRoute.delete(
+  "/:id",
+  authMiddleware,
+  isAdminMiddleware,
+  deleteProductController
+);
+productRoute.get("/search", searchProductsController);
 productRoute.get("/topSelling",getTopSellingProductsController);
 productRoute.get("/all", getAllProductsController);
 productRoute.get("/disabled",getAllDisabledProductsController)
-productRoute.get("/:id", getProductByIdController);
 productRoute.get("/category/:categoryId", getProductByCategoryController);
+productRoute.get("/:id", getProductByIdController);
 productRoute.patch("/status/:id",authMiddleware,
 isAdminMiddleware,toggleProductStatusController)
 

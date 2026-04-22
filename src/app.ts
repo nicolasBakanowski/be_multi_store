@@ -18,6 +18,7 @@ import { randomUUID } from "crypto";
 import categoryRoute from "./routes/categoryRoute";
 import orderRoute from "./routes/orderRoute";
 import productRoute from "./routes/productRoute";
+import brandRoute from "./routes/brandRoute";
 import userRoute from "./routes/usersRoute";
 import statusRoute from "./routes/statusRoute";
 import earningRoute from "./routes/earningRoute";
@@ -30,6 +31,8 @@ import { globalApiLimiter } from "./config/rateLimit";
 import { errorHandler } from "./middleware/errorHandler";
 
 validateEnv();
+
+const UPLOAD_ROOT = path.resolve(__dirname, "uploads");
 
 const app = express();
 const logger = pino({
@@ -94,6 +97,7 @@ app.use(globalApiLimiter);
 function mountApiRoutes(r: express.Router) {
   r.use("/category", categoryRoute);
   r.use("/product", productRoute);
+  r.use("/brand", brandRoute);
   r.use("/user", userRoute);
   r.use("/order", orderRoute);
   r.use("/status", statusRoute);
@@ -109,11 +113,15 @@ app.use("/api/v1", v1);
 
 app.use(
   "/dist/uploads/product/",
-  express.static(path.join(__dirname, "uploads", "product"))
+  express.static(path.join(UPLOAD_ROOT, "product"))
 );
 app.use(
   "/dist/uploads/category/",
-  express.static(path.join(__dirname, "uploads", "category"))
+  express.static(path.join(UPLOAD_ROOT, "category"))
+);
+app.use(
+  "/dist/uploads/brand/",
+  express.static(path.join(UPLOAD_ROOT, "brand"))
 );
 
 app.get("/test", (_req, res) => {

@@ -1,6 +1,7 @@
 import Product from "../models/productModel";
 import { ProductAttributes,ProductEdit } from "../interfaces/productInterface";
 import sequelize from "../db";
+import { Op } from "sequelize";
 
 async function createProductInDB(productData: ProductAttributes) {
   try {
@@ -40,6 +41,36 @@ async function getProductsByCategoryFromDB(categoryId: number) {
     return products;
   } catch (error) {
     throw new Error("Error fetching products by category from the database");
+  }
+}
+
+async function searchProductsFromDB(params: {
+  q?: string;
+  categoryId?: number;
+  brandId?: number;
+  limit: number;
+  offset: number;
+}) {
+  try {
+    const where: any = { available: true };
+    if (params.categoryId) where.categoryId = params.categoryId;
+    if (params.brandId) where.brandId = params.brandId;
+    if (params.q && params.q.trim()) {
+      const q = params.q.trim();
+      where[Op.or] = [
+        { name: { [Op.like]: `%${q}%` } },
+        { description: { [Op.like]: `%${q}%` } },
+      ];
+    }
+
+    return await Product.findAll({
+      where,
+      limit: params.limit,
+      offset: params.offset,
+      order: [["id", "DESC"]],
+    });
+  } catch {
+    throw new Error("Error searching products in the database");
   }
 }
 
@@ -109,6 +140,14 @@ async function getTopSellingProductsFromDB() {
   }
 }
 
+async function deleteProductInDB(productId: number) {
+  try {
+    return await Product.destroy({ where: { id: productId } });
+  } catch (error) {
+    throw new Error("Error deleting product in the database");
+  }
+}
+
 async function getProductsCost(productIds: number[]) {
   try {
     const products = await Product.findAll({
@@ -131,9 +170,11 @@ export {
   getAllProductsFromDB,
   getProductByIdFromDB,
   getProductsByCategoryFromDB,
+  searchProductsFromDB,
   editProductInDB,
   toggleProductStatusInDB,
   getAllDisabledProductsFromDB,
   getTopSellingProductsFromDB,
+  deleteProductInDB,
   getProductsCost
 };
