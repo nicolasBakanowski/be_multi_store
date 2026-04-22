@@ -13,6 +13,7 @@ module.exports = {
           { id: 1, name: "Admin", createdAt: new Date(), updatedAt: new Date() },
           { id: 2, name: "Usuario", createdAt: new Date(), updatedAt: new Date() },
           { id: 3, name: "Empleado", createdAt: new Date(), updatedAt: new Date() },
+          { id: 4, name: "Superadmin", createdAt: new Date(), updatedAt: new Date() },
         ],
         { transaction }
       );

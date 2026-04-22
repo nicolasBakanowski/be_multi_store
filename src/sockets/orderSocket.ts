@@ -1,7 +1,7 @@
 import { Server, Socket } from "socket.io";
 import { verifyToken } from "../helpers/tokenManager";
 import { getEnv } from "../config/env";
-import { RoleId } from "../constants/roles";
+import { isAdminRole } from "../constants/roles";
 import type { TokenPayload } from "../interfaces/tokenPayload";
 
 type SocketDataUser = { user?: TokenPayload };
@@ -43,7 +43,7 @@ export default (io: Server) => {
 
   io.on("connection", (socket: Socket) => {
     const user = (socket.data as SocketDataUser).user;
-    if (user?.roleId === RoleId.ADMIN) {
+    if (isAdminRole(user?.roleId ?? null)) {
       socket.join("admins");
     }
     console.info(
