@@ -3,9 +3,9 @@ import { removeBearerPrefix } from "./removeBearer";
 import { TokenPayload } from "../interfaces/tokenPayload";
 
 function secretKey(): string {
-  const k = process.env.SECRET_KEY;
+  const k = process.env.SECRET_KEY || process.env.JWT_SECRET;
   if (!k) {
-    throw new Error("La variable de entorno SECRET_KEY no está definida.");
+    throw new Error("La variable de entorno SECRET_KEY/JWT_SECRET no está definida.");
   }
   return k;
 }

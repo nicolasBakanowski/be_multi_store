@@ -2,7 +2,9 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
+    await queryInterface.sequelize.query("SET FOREIGN_KEY_CHECKS = 0");
     await queryInterface.bulkDelete("Status", null, {});
+    await queryInterface.sequelize.query("SET FOREIGN_KEY_CHECKS = 1");
 
     return queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.bulkInsert(
@@ -21,6 +23,8 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    return queryInterface.bulkDelete("Status", null, {});
+    await queryInterface.sequelize.query("SET FOREIGN_KEY_CHECKS = 0");
+    await queryInterface.bulkDelete("Status", null, {});
+    await queryInterface.sequelize.query("SET FOREIGN_KEY_CHECKS = 1");
   },
 };

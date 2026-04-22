@@ -9,6 +9,7 @@
     "worker:dev": "ts-node src/worker.ts",
     "build": "tsc",
     "test": "jest",
+    "test:integration": "bash scripts/test-integration.sh",
     "lint": "eslint .",
     "postinstall": "node scripts/npm-postinstall.cjs"
   },
