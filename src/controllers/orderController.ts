@@ -9,6 +9,14 @@ import {
 import { changeOrderStatusService } from "../services/orderService";
 import { getIo } from "../socket/ioSingleton";
 import { enqueueOrderCreated } from "../queue/orderQueue";
+import {
+  addLotteryParticipantService,
+  removeLotteryParticipantByOrderService,
+  getCurrentLotteryService,
+} from "../services/lotteryService";
+
+const ORDER_STATUS_CONFIRMED = 2;
+const ORDER_STATUS_REJECTED = 4;
 
 async function createOrderController(req: Request, res: Response) {
   try {
@@ -23,6 +31,7 @@ async function createOrderController(req: Request, res: Response) {
       totalCostPriceAmount: totalCostPrice,
       extraCommentary: "",
       statusId: 1,
+      userId: req.user?.id ?? null,
     };
     const newOrder = await createOrderService(orderData);
     await createOrderProductService(newOrder.id, simplifiedCartItems);
@@ -76,10 +85,27 @@ async function changeOrderStatusController(req: Request, res: Response) {
   try {
     const { statusId } = req.body;
     const orderId = parseInt(req.params.id, 10);
-    const status = await changeOrderStatusService(orderId, statusId);
+    const order = await changeOrderStatusService(orderId, statusId);
     const io = getIo();
-    io.emit("orderStatusChanged", status);
-    res.status(200).json(status);
+    io.emit("orderStatusChanged", order);
+
+    if (order.userId) {
+      if (statusId === ORDER_STATUS_CONFIRMED) {
+        const activeLottery = await getCurrentLotteryService();
+        if (activeLottery) {
+          await addLotteryParticipantService(
+            order.userId,
+            activeLottery.id,
+            orderId,
+            order.totalAmount
+          );
+        }
+      } else if (statusId === ORDER_STATUS_REJECTED) {
+        await removeLotteryParticipantByOrderService(orderId);
+      }
+    }
+
+    res.status(200).json(order);
   } catch (error) {
     res.status(500).json({ error: "Error fetching categories" });
   }

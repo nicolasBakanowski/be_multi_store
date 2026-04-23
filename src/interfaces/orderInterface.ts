@@ -18,11 +18,12 @@ interface OrderAttributes {
   address: string | null;
   extraCommentary: string;
   delivery: boolean;
-  totalAmount: number; 
+  totalAmount: number;
   totalCostPriceAmount: number;
   statusId: number;
-  createdAt?: Date;  
-  updatedAt?: Date; 
+  userId?: number | null;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 interface OrderData {

@@ -6,6 +6,7 @@ import {
 } from "../controllers/orderController";
 import { authMiddleware } from "../middleware/authMiddleware";
 import { isAdminMiddleware } from "../middleware/isAdminMiddleware";
+import { optionalAuthMiddleware } from "../middleware/optionalAuthMiddleware";
 
 const orderRoute = express.Router();
 orderRoute.get(
@@ -14,7 +15,7 @@ orderRoute.get(
   isAdminMiddleware,
   getAllOrdersController
 );
-orderRoute.post("/new", createOrderController);
+orderRoute.post("/new", optionalAuthMiddleware, createOrderController);
 orderRoute.put(
   "/:id",
   authMiddleware,

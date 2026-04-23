@@ -5,9 +5,11 @@ export interface LotteryAttributes {
     targetAmount:number
   }
 export interface LotteryParticipantAttributes {
-    id: number;
+    id?: number;
     userId: number;
     lotteryId: number;
+    orderId: number;
+    amount: number;
   }
 
 export interface LotteryCreationAttributes

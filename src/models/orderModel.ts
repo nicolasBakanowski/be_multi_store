@@ -11,8 +11,9 @@ class Order extends Model<OrderAttributes> implements OrderAttributes {
   public address!: string | null;
   public delivery!: boolean;
   public statusId!: number;
-  public totalAmount!: number; 
+  public totalAmount!: number;
   public totalCostPriceAmount!: number;
+  public userId!: number | null;
   public status!: Status;
 }
 
@@ -60,6 +61,16 @@ Order.init(
         model: "Status",
         key: "id",
       },
+    },
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: "Users",
+        key: "id",
+      },
+      onUpdate: "CASCADE",
+      onDelete: "SET NULL",
     },
   },
   {
