@@ -29,6 +29,7 @@ import { getCorsOrigins } from "./corsConfig";
 import { setIo } from "./socket/ioSingleton";
 import { globalApiLimiter } from "./config/rateLimit";
 import { errorHandler } from "./middleware/errorHandler";
+import analyticsRoute from "./routes/analyticsRoute";
 
 validateEnv();
 
@@ -102,6 +103,7 @@ function mountApiRoutes(r: express.Router) {
   r.use("/order", orderRoute);
   r.use("/status", statusRoute);
   r.use("/earning", earningRoute);
+  r.use("/analytics", analyticsRoute);
   r.use("/lotery", lotteryRoute);
   r.use("/lottery", lotteryRoute);
 }

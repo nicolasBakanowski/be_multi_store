@@ -20,13 +20,14 @@ const ORDER_STATUS_REJECTED = 4;
 
 async function createOrderController(req: Request, res: Response) {
   try {
-    const { userInfo, simplifiedCartItems, totalAmount, totalCostPrice } =
+    const { userInfo, simplifiedCartItems, totalAmount, totalCostPrice, deliveryMethod } =
       req.body;
+    const isDelivery = String(deliveryMethod) === "delivery";
     const orderData: OrderAttributes = {
       name: userInfo.name,
       phone: userInfo.phone,
       address: userInfo.address,
-      delivery: true,
+      delivery: isDelivery,
       totalAmount: totalAmount,
       totalCostPriceAmount: totalCostPrice,
       extraCommentary: "",
@@ -53,7 +54,7 @@ async function createOrderController(req: Request, res: Response) {
       orderId: newOrder.id,
       totalAmount: newOrder.totalAmount,
     });
-    return res.status(200).json({ status: "OK" });
+    return res.status(200).json({ status: "OK", orderId: newOrder.id });
   } catch (error) {
     console.error("Error:", error);
     return res
