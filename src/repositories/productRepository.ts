@@ -156,7 +156,10 @@ async function getProductsCost(productIds: number[]) {
       },
       attributes: ["costPrice"],
     });
-    const totalCost = products.reduce((acc, product) => acc + (product.costPrice || 0), 0);
+    const totalCost = products.reduce((acc, product) => {
+      const v = Number(product.costPrice ?? 0);
+      return acc + (Number.isFinite(v) ? v : 0);
+    }, 0);
     return totalCost;
   } catch (error) {
     throw new Error("Error fetching products cost from the database");

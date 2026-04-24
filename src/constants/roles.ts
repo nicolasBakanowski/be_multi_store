@@ -6,11 +6,24 @@ export const RoleId = {
   SUPERADMIN: 4,
 } as const;
 
-export function isSuperAdminRole(roleId: number | null | undefined): boolean {
-  return roleId === RoleId.SUPERADMIN;
+function normalizeRoleId(
+  roleId: number | string | null | undefined
+): number | null {
+  if (roleId === null || roleId === undefined) return null;
+  const n = Number(roleId);
+  return Number.isFinite(n) ? n : null;
+}
+
+export function isSuperAdminRole(
+  roleId: number | string | null | undefined
+): boolean {
+  return normalizeRoleId(roleId) === RoleId.SUPERADMIN;
 }
 
 /** SUPERADMIN incluye permisos de ADMIN. */
-export function isAdminRole(roleId: number | null | undefined): boolean {
-  return roleId === RoleId.ADMIN || roleId === RoleId.SUPERADMIN;
+export function isAdminRole(
+  roleId: number | string | null | undefined
+): boolean {
+  const n = normalizeRoleId(roleId);
+  return n === RoleId.ADMIN || n === RoleId.SUPERADMIN;
 }

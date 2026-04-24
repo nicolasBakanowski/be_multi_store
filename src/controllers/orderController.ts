@@ -1,22 +1,18 @@
 import { Request, Response } from "express";
 import { createOrderService } from "../services/orderService";
+import Order from "../models/orderModel";
 import { OrderAttributes } from "../interfaces/orderInterface";
 import {
   createOrderProductService,
   getAllOrderProductsByIdService,
   getAllOrdersProductService,
 } from "../services/orderProductService";
-import { changeOrderStatusService } from "../services/orderService";
 import { getIo } from "../socket/ioSingleton";
 import { enqueueOrderCreated } from "../queue/orderQueue";
 import {
-  addLotteryParticipantService,
-  removeLotteryParticipantByOrderService,
-  getCurrentLotteryService,
-} from "../services/lotteryService";
-
-const ORDER_STATUS_CONFIRMED = 2;
-const ORDER_STATUS_REJECTED = 4;
+  runOrderStatusChange,
+  InsufficientStockError,
+} from "../services/inventoryOrderService";
 
 async function createOrderController(req: Request, res: Response) {
   try {
@@ -39,15 +35,18 @@ async function createOrderController(req: Request, res: Response) {
     const allProductsInOrder = await getAllOrderProductsByIdService(
       newOrder.id
     );
+    const newOrderPlain = newOrder instanceof Order
+      ? newOrder.get({ plain: true })
+      : newOrder;
     const orderWithProducts = {
-      newOrder,
+      newOrder: newOrderPlain,
       productsInOrder: allProductsInOrder,
     };
     const io = getIo();
+    // Sala admins (tokens con rol admin); si está vacía, fallback para no perder eventos (p. ej. dev).
+    io.to("admins").emit("newOrder", orderWithProducts);
     const adminsRoom = io.sockets.adapter.rooms.get("admins");
-    if (adminsRoom && adminsRoom.size > 0) {
-      io.to("admins").emit("newOrder", orderWithProducts);
-    } else {
+    if (!adminsRoom || adminsRoom.size === 0) {
       io.emit("newOrder", orderWithProducts);
     }
     await enqueueOrderCreated({
@@ -86,29 +85,29 @@ async function changeOrderStatusController(req: Request, res: Response) {
   try {
     const { statusId } = req.body;
     const orderId = parseInt(req.params.id, 10);
-    const order = await changeOrderStatusService(orderId, statusId);
+    const { order, stockUpdates, lotteryProgress } = await runOrderStatusChange(
+      orderId,
+      statusId
+    );
     const io = getIo();
     io.emit("orderStatusChanged", order);
-
-    if (order.userId) {
-      if (statusId === ORDER_STATUS_CONFIRMED) {
-        const activeLottery = await getCurrentLotteryService();
-        if (activeLottery) {
-          await addLotteryParticipantService(
-            order.userId,
-            activeLottery.id,
-            orderId,
-            order.totalAmount
-          );
-        }
-      } else if (statusId === ORDER_STATUS_REJECTED) {
-        await removeLotteryParticipantByOrderService(orderId);
-      }
+    if (lotteryProgress) {
+      io.emit("lotteryProgressUpdated", lotteryProgress);
     }
-
-    res.status(200).json(order);
+    if (stockUpdates.length > 0) {
+      io.emit("productStocksUpdated", stockUpdates);
+    }
+    return res.status(200).json(order);
   } catch (error) {
-    res.status(500).json({ error: "Error fetching categories" });
+    if (error instanceof InsufficientStockError) {
+      return res
+        .status(400)
+        .json({ error: error.message, code: "INSUFFICIENT_STOCK" });
+    }
+    console.error("Error:", error);
+    return res
+      .status(500)
+      .json({ error: "Error al actualizar el estado del pedido" });
   }
 }
 export {

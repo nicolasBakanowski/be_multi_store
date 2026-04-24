@@ -26,12 +26,9 @@ async function createOrderProductService(
 }
 async function getAllOrderProductsByIdService(orderId: number) {
   const products = await getAllProductsByOrderfromBd(orderId);
-  const productsFormatted = await Promise.all(
-    products.map(async (orderProduct) => {
-      return orderProduct.dataValues;
-    })
+  return products.map((orderProduct) =>
+    orderProduct.get({ plain: true })
   );
-  return productsFormatted;
 }
 async function getAllOrdersProductService(limit = 100, offset = 0) {
   try {

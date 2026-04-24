@@ -34,7 +34,7 @@ describe("Order endpoints", () => {
 
       const response = await request(app).post("/order/new").send(body);
       expect(response.status).toBe(200);
-      expect(response.body).toEqual({ status: "OK" });
+      expect(response.body).toEqual({ status: "OK", orderId: 1 });
     });
   });
 
