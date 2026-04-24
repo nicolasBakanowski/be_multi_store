@@ -30,6 +30,7 @@ import { setIo } from "./socket/ioSingleton";
 import { globalApiLimiter } from "./config/rateLimit";
 import { errorHandler } from "./middleware/errorHandler";
 import analyticsRoute from "./routes/analyticsRoute";
+import backupRoute from "./routes/backupRoute";
 
 validateEnv();
 
@@ -112,6 +113,7 @@ mountApiRoutes(app);
 const v1 = express.Router();
 mountApiRoutes(v1);
 app.use("/api/v1", v1);
+app.use("/api/v1/admin/backup", backupRoute);
 
 app.use(
   "/dist/uploads/product/",

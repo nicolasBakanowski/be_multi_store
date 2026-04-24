@@ -39,7 +39,9 @@ services:
       DB_HOST: db
       MYSQL_HOST: db
     ports:
-      - "${PORT:-30001}:30001"
+      - "127.0.0.1:${PORT:-30001}:30001"
+    volumes:
+      - uploads_data:/app/dist/uploads
     depends_on:
       db:
         condition: service_healthy
@@ -73,3 +75,4 @@ services:
 
 volumes:
   mysql_prod_data:
+  uploads_data:
